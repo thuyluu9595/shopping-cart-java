@@ -8,11 +8,15 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String code;
+
     @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
-    private Long price;
+    private float price;
 
     @Column
     private String description;
@@ -34,11 +38,11 @@ public class Product {
         this.name = name;
     }
 
-    public Long getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 
@@ -48,6 +52,14 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     @Override
