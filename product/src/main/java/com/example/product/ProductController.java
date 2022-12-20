@@ -18,13 +18,21 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
+    // /products
     @GetMapping("/products")
     public List<Product> GetAllProducts(){
+        /*
+         Get all products
+         */
         return productRepository.findAll();
     }
 
+    // /products/<long:id>
     @GetMapping("/products/{id}")
     public ResponseEntity<Optional> GetProductById(@PathVariable Long id){
+        /*
+         Get product by id
+         */
         Optional<Product> product = productRepository.findById(id);
         if(product.isEmpty()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -32,8 +40,19 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
+    @GetMapping("/products/brands")
+    public  List<String> ProductName(){
+        /*
+        Get all product name brands
+         */
+        return productRepository.findDistinctName();
+    }
+    // products
     @PostMapping("/products")
     public ResponseEntity<Product> CreateProduct(@RequestBody Product body){
+        /*
+         Create a new product
+         */
         String productName = body.getName();
         if(productRepository.existsProductByName(productName)){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -44,8 +63,12 @@ public class ProductController {
         return new ResponseEntity<>(body, HttpStatus.CREATED);
     }
 
+    // /products/<long:id>
     @DeleteMapping("/products/{id}")
     public ResponseEntity DeleteProduct(@PathVariable Long id){
+        /*
+         Delete product by id
+         */
         Optional<Product> product = productRepository.findById(id);
         if(product.isPresent()){
             productRepository.deleteById(id);
