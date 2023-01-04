@@ -6,11 +6,11 @@ import jakarta.persistence.*;
 @Table(name= "product")
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String code;
+//    @Column(nullable = false, unique = true)
+//    private String code;
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -18,16 +18,21 @@ public class Product {
     @Column(nullable = false)
     private float price;
 
-    @Column
+    @Column(columnDefinition = "text")
     private String description;
+
+    @Column(nullable = false)
+    private int qty;
 
     public Product() {
     }
 
-    public Product(String name, Long price, String description) {
+    public Product(String name, Long price, String description, int qty) {
         this.name = name;
         this.price = price;
         this.description = description;
+        this.qty = qty;
+
     }
 
     public String getName() {
@@ -54,20 +59,31 @@ public class Product {
         this.description = description;
     }
 
-    public String getCode() {
-        return code;
+//    public String getCode() {
+//        return code;
+//    }
+//
+//    public void setCode(String code) {
+//        this.code = code;
+//    }
+
+
+    public int getQty() {
+        return qty;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setQty(int qty) {
+        this.qty = qty;
     }
 
     @Override
     public String toString() {
         return "Product{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", price=" + price +
                 ", description='" + description + '\'' +
+                ", qty=" + qty +
                 '}';
     }
 }
