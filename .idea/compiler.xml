@@ -6,9 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="reviews" />
-        <module name="cart" />
         <module name="product" />
+        <module name="reviews" />
+        <module name="user" />
+        <module name="cart" />
       </profile>
     </annotationProcessing>
   </component>
@@ -17,6 +18,7 @@
       <module name="cart" options="-parameters" />
       <module name="product" options="-parameters" />
       <module name="reviews" options="-parameters" />
+      <module name="user" options="-parameters" />
     </option>
   </component>
 </project>

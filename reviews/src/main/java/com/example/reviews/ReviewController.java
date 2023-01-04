@@ -24,7 +24,7 @@ public class ReviewController {
 
     @GetMapping("/create")
     public ResponseEntity<String> create(){
-        Review review = new Review("123","456", "test review", 3.5);
+        Review review = new Review(123,456, "test review", 3.5);
         reviewRepository.save(review);
         return new ResponseEntity<>("created successfully", HttpStatus.OK);
     }

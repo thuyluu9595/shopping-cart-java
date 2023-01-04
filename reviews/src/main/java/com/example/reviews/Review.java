@@ -9,14 +9,14 @@ import java.util.UUID;
 public class Review {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(nullable = false, unique = true)
-    private String user_id;
+    private long user_id;
 
     @Column(nullable = false, unique = true)
-    private String product_id;
+    private long product_id;
 
     private String comment;
 
@@ -25,26 +25,26 @@ public class Review {
     public Review() {
     }
 
-    public Review(String user_id, String product_id, String comment, double rating) {
+    public Review(long user_id, long product_id, String comment, double rating) {
         this.user_id = user_id;
         this.product_id = product_id;
         this.comment = comment;
         this.rating = rating;
     }
 
-    public String getUser_id() {
+    public long getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(String user_id) {
+    public void setUser_id(long user_id) {
         this.user_id = user_id;
     }
 
-    public String getProduct_id() {
+    public long getProduct_id() {
         return product_id;
     }
 
-    public void setProduct_id(String product_id) {
+    public void setProduct_id(long product_id) {
         this.product_id = product_id;
     }
 
