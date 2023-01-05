@@ -40,5 +40,21 @@ public class ProductService {
     public void deleteProduct(long id) {
         productRepository.deleteById(id);
     }
+
+    public Product updateRating(Long id, double rating){
+        Product product = productRepository.findById(id).orElse(null);
+        if(product == null){
+            return null;
+        }
+        if(product.getReview_count() == 0){
+            product.setRating(rating);
+        } else {
+            double new_rating = (product.getRating() * product.getReview_count() + rating) / (product.getReview_count() + 1);
+            product.setRating(new_rating);
+        }
+        product.setReview_count(product.getReview_count()+1);
+        productRepository.save(product);
+        return product;
+    }
 }
 

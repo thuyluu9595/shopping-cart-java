@@ -112,5 +112,11 @@ public class ProductController {
     public void deleteProduct(@PathVariable long id) {
         productService.deleteProduct(id);
     }
+
+    // Rating update route
+    @PutMapping("/update-rating/{id}")
+    public Product updateRating(@PathVariable long id, @RequestBody double rating){
+        return productService.updateRating(id, rating);
+    }
 }
 

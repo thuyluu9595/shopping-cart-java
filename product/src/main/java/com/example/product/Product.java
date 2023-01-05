@@ -24,15 +24,21 @@ public class Product {
     @Column(nullable = false)
     private int qty;
 
+    @Column(nullable = true)
+    private double rating;
+
+    @Column(nullable = true)
+    private int review_count;
+
     public Product() {
     }
 
-    public Product(String name, Long price, String description, int qty) {
+    public Product(String name, float price, String description, int qty) {
         this.name = name;
         this.price = price;
         this.description = description;
         this.qty = qty;
-
+        this.review_count = 0;
     }
 
     public String getName() {
@@ -74,6 +80,22 @@ public class Product {
 
     public void setQty(int qty) {
         this.qty = qty;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public int getReview_count() {
+        return review_count;
+    }
+
+    public void setReview_count(int review_count) {
+        this.review_count = review_count;
     }
 
     @Override
