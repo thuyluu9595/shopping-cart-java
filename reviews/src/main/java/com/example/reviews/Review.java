@@ -2,21 +2,19 @@ package com.example.reviews;
 
 import jakarta.persistence.*;
 
-import java.util.UUID;
-
 @Entity
 @Table(name="review")
 public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
-    private long user_id;
+    private Long user_id;
 
     @Column(nullable = false, unique = true)
-    private long product_id;
+    private Long product_id;
 
     private String comment;
 
@@ -32,19 +30,19 @@ public class Review {
         this.rating = rating;
     }
 
-    public long getUser_id() {
+    public Long getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(long user_id) {
+    public void setUser_id(Long user_id) {
         this.user_id = user_id;
     }
 
-    public long getProduct_id() {
+    public Long getProduct_id() {
         return product_id;
     }
 
-    public void setProduct_id(long product_id) {
+    public void setProduct_id(Long product_id) {
         this.product_id = product_id;
     }
 
@@ -60,7 +58,7 @@ public class Review {
         return rating;
     }
 
-    public void setRating(float rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 
