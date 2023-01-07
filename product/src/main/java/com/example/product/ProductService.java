@@ -49,7 +49,7 @@ public class ProductService {
         if(product.getReview_count() == 0){
             product.setRating(rating);
         } else {
-            double new_rating = (product.getRating() * product.getReview_count() + rating) / (product.getReview_count() + 1);
+            double new_rating = Math.round(product.getRating() * product.getReview_count()*1.0 + rating) / (product.getReview_count() + 1.0);
             product.setRating(new_rating);
         }
         product.setReview_count(product.getReview_count()+1);

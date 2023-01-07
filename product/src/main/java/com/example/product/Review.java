@@ -1,19 +1,9 @@
-package com.example.reviews;
+package com.example.product;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name="review")
 public class Review {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
     private Long user_id;
 
-    @Column(nullable = false)
     private Long product_id;
 
     private String comment;
@@ -65,7 +55,6 @@ public class Review {
     @Override
     public String toString() {
         return "Review{" +
-                "id='" + id + '\'' +
                 ", user_id='" + user_id + '\'' +
                 ", product_id='" + product_id + '\'' +
                 ", comment='" + comment + '\'' +

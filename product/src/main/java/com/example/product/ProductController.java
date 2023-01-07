@@ -115,8 +115,9 @@ public class ProductController {
 
     // Rating update route
     @PutMapping("/update-rating/{id}")
-    public Product updateRating(@PathVariable long id, @RequestBody double rating){
-        return productService.updateRating(id, rating);
+    public Product updateRating(@PathVariable Long id,
+                                @RequestBody Review review){
+        return productService.updateRating(id, review.getRating());
     }
 }
 

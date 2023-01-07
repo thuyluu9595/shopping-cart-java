@@ -36,7 +36,7 @@ public class ReviewService {
         }
         exist_review.setComment(review.getComment());
         exist_review.setRating(review.getRating());
-        return exist_review;
+        return reviewRepository.save(exist_review);
     }
 
     public boolean deleteReview(Long id){

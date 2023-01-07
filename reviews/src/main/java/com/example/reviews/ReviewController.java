@@ -14,6 +14,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
@@ -45,12 +46,18 @@ public class ReviewController {
     private void updateAvgRating(Long product_id, Review review){
 
     }
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Review> addReview(@RequestBody Review review, @RequestParam(value = "product_id", required = true) Long product_id,
                                             @RequestParam(value = "user_id", required = true) Long user_id){
         Review created_review = reviewService.addReview(product_id, user_id, review);
         if(created_review == null){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        try {
+            restTemplate.put("http://localhost:8081/api/products/update-rating/" + product_id,review);
+        } catch (Exception e){
+            System.out.println(e);
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(review, HttpStatus.CREATED);
     }
@@ -61,7 +68,7 @@ public class ReviewController {
         if(updated_review == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(review, HttpStatus.OK);
+        return new ResponseEntity<>(updated_review, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
