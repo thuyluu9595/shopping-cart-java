@@ -1,5 +1,6 @@
 package com.example.reviews;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,9 @@ public class ReviewService {
         return reviewRepository.findById(id).orElse(null);
     }
 
-    public Review addReview(Review review){
+    public Review addReview(Long product_id, Long user_id, Review review){
+        review.setProduct_id(product_id);
+        review.setUser_id(user_id);
         return reviewRepository.save(review);
     }
 
@@ -36,7 +39,13 @@ public class ReviewService {
         return exist_review;
     }
 
-    public void deleteReview(Long id){
-        reviewRepository.deleteById(id);
+    public boolean deleteReview(Long id){
+        try {
+            reviewRepository.deleteById(id);
+            return true;
+        } catch (EntityNotFoundException e){
+            return false;
+        }
+
     }
 }
