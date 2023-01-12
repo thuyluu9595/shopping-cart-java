@@ -24,8 +24,8 @@ public class ReviewService {
     }
 
     public Review addReview(Long product_id, Long user_id, Review review){
-        review.setProduct_id(product_id);
-        review.setUser_id(user_id);
+        review.setProductId(product_id);
+        review.setUserId(user_id);
         return reviewRepository.save(review);
     }
 
@@ -47,5 +47,17 @@ public class ReviewService {
             return false;
         }
 
+    }
+
+    public boolean isProducAndUserExist(Long product_id, Long user_id){
+        return !reviewRepository.findByProductIdAndUserId(product_id, user_id).isEmpty();
+    }
+
+    public List<Review> getReviewByUserId(Long id){
+        return reviewRepository.findByUserId(id);
+    }
+
+    public List<Review> getReviewByProductId(Long id){
+        return reviewRepository.findByProductId(id);
     }
 }

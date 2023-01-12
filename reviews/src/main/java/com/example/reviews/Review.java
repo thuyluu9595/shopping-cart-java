@@ -11,10 +11,10 @@ public class Review {
     private Long id;
 
     @Column(nullable = false)
-    private Long user_id;
+    private Long userId;
 
     @Column(nullable = false)
-    private Long product_id;
+    private Long productId;
 
     private String comment;
 
@@ -23,27 +23,27 @@ public class Review {
     public Review() {
     }
 
-    public Review(long user_id, long product_id, String comment, double rating) {
-        this.user_id = user_id;
-        this.product_id = product_id;
+    public Review(long userId, long productId, String comment, double rating) {
+        this.userId = userId;
+        this.productId = productId;
         this.comment = comment;
         this.rating = rating;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setUserId(Long user_id) {
+        this.userId = user_id;
     }
 
-    public Long getProduct_id() {
-        return product_id;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setProduct_id(Long product_id) {
-        this.product_id = product_id;
+    public void setProductId(Long product_id) {
+        this.productId = product_id;
     }
 
     public String getComment() {
@@ -66,8 +66,8 @@ public class Review {
     public String toString() {
         return "Review{" +
                 "id='" + id + '\'' +
-                ", user_id='" + user_id + '\'' +
-                ", product_id='" + product_id + '\'' +
+                ", user_id='" + userId + '\'' +
+                ", product_id='" + productId + '\'' +
                 ", comment='" + comment + '\'' +
                 ", rating=" + rating +
                 '}';

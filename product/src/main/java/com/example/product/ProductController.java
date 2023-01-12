@@ -113,11 +113,18 @@ public class ProductController {
         productService.deleteProduct(id);
     }
 
-    // Rating update route
+    /**
+     * Update rating route
+     * @param id : product id
+     * @param review : review object
+     * @return Product
+     */
     @PutMapping("/update-rating/{id}")
     public Product updateRating(@PathVariable Long id,
                                 @RequestBody Review review){
         return productService.updateRating(id, review.getRating());
     }
+
+
 }
 

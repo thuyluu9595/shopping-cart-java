@@ -37,6 +37,10 @@ public class ProductService {
         return productRepository.save(existingProduct);
     }
 
+    private static double round(double value){
+        int scale = (int) Math.pow(10, 1);
+        return (double) Math.round(value * scale) / scale;
+    }
     public void deleteProduct(long id) {
         productRepository.deleteById(id);
     }
@@ -49,12 +53,15 @@ public class ProductService {
         if(product.getReview_count() == 0){
             product.setRating(rating);
         } else {
-            double new_rating = Math.round(product.getRating() * product.getReview_count()*1.0 + rating) / (product.getReview_count() + 1.0);
+            double new_rating = (product.getRating() * product.getReview_count()*1.0 + rating) / (product.getReview_count() + 1.0);
+            new_rating = round(new_rating);
             product.setRating(new_rating);
         }
         product.setReview_count(product.getReview_count()+1);
         productRepository.save(product);
         return product;
     }
+
+
 }
 
