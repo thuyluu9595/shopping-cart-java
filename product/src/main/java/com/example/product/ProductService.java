@@ -21,7 +21,7 @@ public class ProductService {
         return productRepository.findById(id).orElse(null);
     }
 
-    public Product addProduct(Product product) {
+    public Product createProduct(Product product) {
         return productRepository.save(product);
     }
 
@@ -30,6 +30,7 @@ public class ProductService {
         if (existingProduct == null) {
             return null;
         }
+
         existingProduct.setName(product.getName());
         existingProduct.setDescription(product.getDescription());
         existingProduct.setPrice(product.getPrice());
