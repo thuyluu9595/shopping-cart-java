@@ -14,12 +14,12 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @Autowired
-     private RestTemplate restTemplate;
+     private final RestTemplate restTemplate;
 
     @Autowired
-    public ReviewController(ReviewService reviewService) {
+    public ReviewController(ReviewService reviewService, RestTemplate restTemplate) {
         this.reviewService = reviewService;
+        this.restTemplate = restTemplate;
     }
 
 

@@ -10,6 +10,8 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long productId;
+
     private String name;
     private double price;
     private int qty;
@@ -18,7 +20,8 @@ public class Item {
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
-    public Item(String name, double price, int qty, Order order) {
+    public Item(String name, Long productId, double price, int qty, Order order) {
+        this.productId = productId;
         this.name = name;
         this.price = price;
         this.qty = qty;
@@ -34,6 +37,14 @@ public class Item {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getProductId(){
+        return productId;
+    }
+
+    public void setProductId(Long productId){
+        this.productId = productId;
     }
 
     public String getName() {
