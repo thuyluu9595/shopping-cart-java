@@ -48,6 +48,13 @@ public class OrderController {
         return new ResponseEntity<>(created_order, HttpStatus.CREATED);
     }
 
+    /**
+     * Updating order route for order id
+     * @param id : order id
+     * @param order : updating order
+     * @return : Updated order
+     */
+    @PutMapping("/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order order){
         if(orderService.updateOrder(id, order) == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -55,4 +62,39 @@ public class OrderController {
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
+    /**
+     * Deleting order route
+     * @param id : order id
+     * @return HTTP Response
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteOrder(@PathVariable Long id){
+        if(orderService.deleteOrder(id)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Get orders by user id
+     * @param id user id
+     * @return list of orders
+     */
+    @GetMapping("/mine/{id}")
+    public ResponseEntity<List<Order>> getOrdersByUserId(@PathVariable Long id){
+        return new ResponseEntity<>(orderService.getOrdersByUser(id), HttpStatus.OK);
+    }
+
+    /**
+     * Updating delivery status
+     * @param id order id
+     * @return HTTP response
+     */
+    @PutMapping("/{id}/deliver")
+    public ResponseEntity<Order> updateDeliveryStatus(@PathVariable Long id){
+        if(orderService.updateDeliveryStatus(id) == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

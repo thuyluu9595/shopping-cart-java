@@ -6,6 +6,7 @@ import com.example.order.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,7 +38,7 @@ public class OrderService {
 
     /**
      * Creating a new order
-     * @param order : order object
+     * @param order order object
      * @return created order
      */
     public Order createOrder(Order order){
@@ -77,4 +78,55 @@ public class OrderService {
         }
     }
 
+    /**
+     * Return number of distinct users
+     * @return : number of distinct user
+     */
+    public long countDistinctUsers(){
+        return orderRepository.countDistinctByUserId();
+    }
+
+    /**
+     * Return total number of orders
+     * @return : number of orders
+     */
+    public long countAllOrders(){
+        return orderRepository.count();
+    }
+
+    /**
+     * Return the total sale
+     * @return : total sale
+     */
+    public double totalSale(){
+        List<Order> orderList = getAllOrders();
+        double sumSale = 0;
+        for (Order order : orderList){
+            sumSale += order.getTotalPrice();
+        }
+        return sumSale;
+    }
+
+    /**
+     * get all orders by user id
+     * @param userId : user id
+     * @return list of orders
+     */
+    public List<Order> getOrdersByUser(Long userId){
+        return orderRepository.findAllByUserId(userId);
+    }
+
+    /**
+     * Updating delivery status and delivery time
+     * @param orderId : order id
+     * @return updated order
+     */
+    public Order updateDeliveryStatus(Long orderId){
+        Order order = getOrderById(orderId);
+        if (order == null) return null;
+        order.setDelivered(true);
+        order.setDeliveredAt(LocalDateTime.now());
+        orderRepository.save(order);
+        return order;
+    }
 }
