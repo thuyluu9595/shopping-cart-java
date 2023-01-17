@@ -78,34 +78,34 @@ public class OrderService {
         }
     }
 
-    /**
-     * Return number of distinct users
-     * @return : number of distinct user
-     */
-    public long countDistinctUsers(){
-        return orderRepository.countDistinctByUserId();
-    }
-
-    /**
-     * Return total number of orders
-     * @return : number of orders
-     */
-    public long countAllOrders(){
-        return orderRepository.count();
-    }
-
-    /**
-     * Return the total sale
-     * @return : total sale
-     */
-    public double totalSale(){
-        List<Order> orderList = getAllOrders();
-        double sumSale = 0;
-        for (Order order : orderList){
-            sumSale += order.getTotalPrice();
-        }
-        return sumSale;
-    }
+//    /**
+//     * Return number of distinct users
+//     * @return : number of distinct user
+//     */
+//    public long countDistinctUsers(){
+//        return orderRepository.countDistinctByUserId();
+//    }
+//
+//    /**
+//     * Return total number of orders
+//     * @return : number of orders
+//     */
+//    public long countAllOrders(){
+//        return orderRepository.count();
+//    }
+//
+//    /**
+//     * Return the total sale
+//     * @return : total sale
+//     */
+//    public double totalSale(){
+//        List<Order> orderList = getAllOrders();
+//        double sumSale = 0;
+//        for (Order order : orderList){
+//            sumSale += order.getTotalPrice();
+//        }
+//        return sumSale;
+//    }
 
     /**
      * get all orders by user id

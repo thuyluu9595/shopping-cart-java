@@ -1,5 +1,7 @@
 package com.example.product;
 
+import com.example.product.models.OrderItem;
+import com.example.product.models.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,6 +65,25 @@ public class ProductService {
         return product;
     }
 
+    public boolean decreaseProductQty(List<OrderItem> orderItems){
+        for (OrderItem orderItem : orderItems) {
+            Product product = getProductById(orderItem.getProductId());
+            if (orderItem.getQty() > product.getQty()) return false;
+        }
+        for (OrderItem item : orderItems) {
+            Product p = getProductById(item.getProductId());
+            p.setQty(p.getQty() - item.getQty());
+            productRepository.save(p);
+        }
+        return true;
+    }
 
+    public void increaseProductQty(List<OrderItem> orderItems){
+        for (OrderItem item : orderItems) {
+            Product product = getProductById(item.getProductId());
+            product.setQty(product.getQty() + item.getQty());
+            productRepository.save(product);
+        }
+    }
 }
 

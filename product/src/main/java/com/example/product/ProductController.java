@@ -1,6 +1,11 @@
 package com.example.product;
 
+import com.example.product.models.OrderItem;
+import com.example.product.models.Product;
+import com.example.product.models.Review;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,6 +63,29 @@ public class ProductController {
         return productService.updateRating(id, review.getRating());
     }
 
+    /**
+     * Decrease product qty
+     * @param orderItems : List of item object
+     * @return HTTP response
+     */
+    @PutMapping("/decrease-qty")
+    public ResponseEntity<?> decreasingProductQty(@RequestBody List<OrderItem> orderItems){
+        if (productService.decreaseProductQty(orderItems)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Increase product qty
+     * @param orderItems : List of item object
+     * @return HTTP response
+     */
+    @PutMapping("/increase-qty")
+    public ResponseEntity<?> increasingProductQty(@RequestBody List<OrderItem> orderItems){
+        productService.increaseProductQty(orderItems);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }
 

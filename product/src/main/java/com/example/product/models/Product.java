@@ -1,4 +1,4 @@
-package com.example.product;
+package com.example.product.models;
 
 import jakarta.persistence.*;
 
@@ -24,10 +24,10 @@ public class Product {
     @Column(nullable = false)
     private int qty;
 
-    @Column(nullable = true)
+    @Column()
     private double rating;
 
-    @Column(nullable = true)
+    @Column()
     private int review_count;
 
     public Product() {
