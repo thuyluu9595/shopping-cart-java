@@ -129,4 +129,34 @@ public class OrderService {
         orderRepository.save(order);
         return order;
     }
+
+    /**
+     * Making a cancel request for an order
+     * @param id : order id
+     * @return order
+     */
+    public Order cancelOrderRequest(Long id){
+        Order order = getOrderById(id);
+        if (order == null) return null;
+
+        order.setRequestCancel(true);
+        order.setRequestedAt(LocalDateTime.now());
+        orderRepository.save(order);
+        return order;
+    }
+
+    /**
+     * Confirming canceling request for order
+     * @param id : order id
+     * @return order
+     */
+    public Order confirmCancelRequest(Long id){
+        Order order = getOrderById(id);
+        if (order == null) return null;
+
+        order.setCancelled(true);
+        order.setCancelledAt(LocalDateTime.now());
+        orderRepository.save(order);
+        return order;
+    }
 }

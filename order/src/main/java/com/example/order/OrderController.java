@@ -97,4 +97,30 @@ public class OrderController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * Making a request for cancelling order
+     * @param id : order id
+     * @return HTTP response
+     */
+    @PutMapping("/{id}/cancel-request")
+    public ResponseEntity<Order> cancelOrderRequest(@PathVariable Long id){
+        if(orderService.cancelOrderRequest(id) == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * Confirming cancel request for order
+     * @param id : order id
+     * @return HTTP response
+     */
+    @PutMapping("/{id}/cancelled")
+    public ResponseEntity<?> confirmingCancelRequest(@PathVariable Long id){
+        if (orderService.confirmCancelRequest(id) == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
