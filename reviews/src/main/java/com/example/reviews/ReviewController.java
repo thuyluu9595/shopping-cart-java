@@ -14,7 +14,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-     private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     @Autowired
     public ReviewController(ReviewService reviewService, RestTemplate restTemplate) {
