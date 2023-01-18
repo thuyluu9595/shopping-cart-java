@@ -1,7 +1,10 @@
 package com.example.order;
 
+import com.example.order.models.Item;
 import com.example.order.models.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +47,17 @@ public class OrderController {
      */
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody Order order){
+        HttpEntity<List<Item>> requestBody = new HttpEntity<>(order.getOrderItems());
+
+        String DECREASING_PRODUCT_QTY_URL = "http://localhost:8081/api/products/decrease-qty";
+        ResponseEntity<?> productServiceResponse = restTemplate.exchange(DECREASING_PRODUCT_QTY_URL, HttpMethod.PUT, requestBody, Void.class);
+
+        if (productServiceResponse.getStatusCode() == HttpStatus.BAD_REQUEST) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         Order created_order = orderService.createOrder(order);
+
         if (created_order == null){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -121,6 +134,13 @@ public class OrderController {
      */
     @PutMapping("/{id}/cancelled")
     public ResponseEntity<?> confirmingCancelRequest(@PathVariable Long id){
+        Order order = orderService.getOrderById(id);
+
+        HttpEntity<List<Item>> requestBody = new HttpEntity<>(order.getOrderItems());
+
+        String INCREASING_PRODUCT_QTY_URL = "http://localhost:8081/api/products/increase-qty";
+        restTemplate.exchange(INCREASING_PRODUCT_QTY_URL, HttpMethod.PUT, requestBody, Void.class);
+
         if (orderService.confirmCancelRequest(id) == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
