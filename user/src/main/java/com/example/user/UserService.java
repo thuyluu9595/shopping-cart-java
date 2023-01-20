@@ -23,6 +23,9 @@ public class UserService {
     }
 
     public User addUser(User user){
+        if (userRepository.findUserByName(user.getName()) != null && userRepository.findUserByEmail(user.getEmail()) != null){
+            return null;
+        }
         return userRepository.save(user);
     }
 
@@ -50,7 +53,12 @@ public class UserService {
         return userRepository.save(savedUser);
     }
 
-    public void deleteUser(Long id){
-        userRepository.deleteById(id);
+    public boolean deleteUser(Long id){
+        try {
+            userRepository.deleteById(id);
+        } catch (Exception e){
+            return false;
+        }
+        return true;
     }
 }

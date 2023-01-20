@@ -22,6 +22,24 @@ public class User {
     @Column(nullable = false)
     private boolean isAdmin;
 
+    public User() {
+    }
+
+    public User(String name, String email, String password, boolean isAdmin) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.isAdmin = isAdmin;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }

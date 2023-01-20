@@ -34,7 +34,7 @@ public class ReviewController {
         product_id = 1L;
         Long user_id;
         user_id = 1L;
-        if(reviewService.isProducAndUserExist(product_id,user_id)){
+        if(reviewService.isProductAndUserExist(product_id,user_id)){
             return "<h1> True</h1>";
         }
         return "<h1> False</h1>";
@@ -58,7 +58,7 @@ public class ReviewController {
     public ResponseEntity<Review> addReview(@RequestBody Review review, @RequestParam(value = "product_id", required = true) Long product_id,
                                             @RequestParam(value = "user_id", required = true) Long user_id){
         // Check if there exists review from the same person for the same product
-        if(reviewService.isProducAndUserExist(product_id,user_id)) return new ResponseEntity<>(HttpStatus.CONFLICT);
+        if(reviewService.isProductAndUserExist(product_id,user_id)) return new ResponseEntity<>(HttpStatus.CONFLICT);
 
         Review created_review = reviewService.addReview(product_id, user_id, review);
 
