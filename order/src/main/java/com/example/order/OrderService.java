@@ -42,9 +42,7 @@ public class OrderService {
      * @return created order
      */
     public Order createOrder(Order order){
-        for (Item item : order.getOrderItems()){
-            item.setOrder(order);
-        }
+
         return orderRepository.save(order);
     }
 

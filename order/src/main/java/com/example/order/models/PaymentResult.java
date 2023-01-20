@@ -7,9 +7,9 @@ import jakarta.persistence.Id;
 
 @Embeddable
 public class PaymentResult {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
     private String status;
     private String updateTime;
     private String emailAddress;
@@ -23,13 +23,13 @@ public class PaymentResult {
         this.emailAddress = emailAddress;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
     public String getStatus() {
         return status;
@@ -58,7 +58,7 @@ public class PaymentResult {
     @Override
     public String toString() {
         return "PaymentResult{" +
-                "id=" + id +
+//                "id=" + id +
                 ", status='" + status + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +

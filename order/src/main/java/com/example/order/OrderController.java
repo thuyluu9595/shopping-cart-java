@@ -147,3 +147,46 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
+
+/*
+POST http://localhost:8083/api/orders
+Content-Type: application/json
+
+{
+  "orderItems": [
+    {
+      "productId": 1,
+      "name": "Nike",
+      "price": 5.5,
+      "qty": 2
+    },
+    {
+      "productId": 2,
+      "name": "Adidas",
+      "price": 4.5,
+      "qty": 1
+    }
+  ],
+  "address": {
+    "name": "Thuy Luu",
+    "address": "4338 Houndsbrook Way",
+    "city": "San Jose",
+    "zipCode": "95111",
+    "country": "USA"
+  },
+  "paymentMethod": "PAYPAL",
+  "paymentResult": {
+    "status": "non",
+    "updateTime": "01/19/23",
+    "emailAddress": "thuyluu9595@gmail.com"
+  },
+  "shippingPrice": 2.0,
+  "taxPrice": 1.0,
+  "itemPrice": 10.0,
+  "totalPrice": 13.0,
+  "userId": 1,
+  "isDelivered": false,
+  "requestCancel": false,
+  "isCancelled": false
+}
+ */
