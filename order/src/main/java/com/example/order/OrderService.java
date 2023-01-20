@@ -135,7 +135,7 @@ public class OrderService {
      */
     public Order cancelOrderRequest(Long id){
         Order order = getOrderById(id);
-        if (order == null) return null;
+        if (order == null || order.isDelivered()) return null;
 
         order.setRequestCancel(true);
         order.setRequestedAt(LocalDateTime.now());

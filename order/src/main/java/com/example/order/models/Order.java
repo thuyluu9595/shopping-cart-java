@@ -13,7 +13,8 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) // fetch = FetchType.LAZY, mappedBy = "order",
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private List<Item> orderItems;
 
     @Embedded

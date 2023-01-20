@@ -16,16 +16,16 @@ public class Item {
     private double price;
     private int qty;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private Order order;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "order_id", referencedColumnName = "id")
+//    private Order order;
 
     public Item(String name, Long productId, double price, int qty, Order order) {
         this.productId = productId;
         this.name = name;
         this.price = price;
         this.qty = qty;
-        this.order = order;
+//        this.order = order;
     }
 
     public Item() {
@@ -71,13 +71,13 @@ public class Item {
         this.qty = qty;
     }
 
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
+//    public Order getOrder() {
+//        return order;
+//    }
+//
+//    public void setOrder(Order order) {
+//        this.order = order;
+//    }
 
     @Override
     public String toString() {
@@ -86,7 +86,7 @@ public class Item {
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", qty=" + qty +
-                ", order=" + order +
+//                ", order=" + order +
                 '}';
     }
 
