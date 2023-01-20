@@ -50,9 +50,9 @@ public class OrderController {
         HttpEntity<List<Item>> requestBody = new HttpEntity<>(order.getOrderItems());
 
         String DECREASING_PRODUCT_QTY_URL = "http://localhost:8081/api/products/decrease-qty";
-        ResponseEntity<?> productServiceResponse = restTemplate.exchange(DECREASING_PRODUCT_QTY_URL, HttpMethod.PUT, requestBody, Void.class);
-
-        if (productServiceResponse.getStatusCode() == HttpStatus.BAD_REQUEST) {
+        try {
+            restTemplate.exchange(DECREASING_PRODUCT_QTY_URL, HttpMethod.PUT, requestBody, Void.class);
+        } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
