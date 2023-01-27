@@ -1,5 +1,6 @@
 package com.example.user;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,7 +57,7 @@ public class UserService {
     public boolean deleteUser(Long id){
         try {
             userRepository.deleteById(id);
-        } catch (Exception e){
+        } catch (EmptyResultDataAccessException e){
             return false;
         }
         return true;
