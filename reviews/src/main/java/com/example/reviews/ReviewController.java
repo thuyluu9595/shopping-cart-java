@@ -64,7 +64,6 @@ public class ReviewController {
         if(created_review == null){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-
 //        try {
 //            restTemplate.put("http://localhost:8081/api/products/update-rating/" + product_id,review);
 //        } catch (Exception e){

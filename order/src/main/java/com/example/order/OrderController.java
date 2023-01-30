@@ -1,14 +1,11 @@
 package com.example.order;
 
-import com.example.order.models.Item;
 import com.example.order.models.Order;
+import com.example.order.proxies.ProductServiceProxy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -17,12 +14,13 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
-    private final RestTemplate restTemplate;
+
+    private final ProductServiceProxy productServiceProxy;
 
     @Autowired
-    public OrderController(OrderService orderService, RestTemplate restTemplate) {
+    public OrderController(OrderService orderService, ProductServiceProxy productServiceProxy) {
         this.orderService = orderService;
-        this.restTemplate = restTemplate;
+        this.productServiceProxy = productServiceProxy;
     }
 
 
@@ -47,11 +45,16 @@ public class OrderController {
      */
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody Order order){
-        HttpEntity<List<Item>> requestBody = new HttpEntity<>(order.getOrderItems());
-
-        String DECREASING_PRODUCT_QTY_URL = "http://localhost:8081/api/products/decrease-qty";
+//        HttpEntity<List<Item>> requestBody = new HttpEntity<>(order.getOrderItems());
+//
+//        String DECREASING_PRODUCT_QTY_URL = "http://localhost:8081/api/products/decrease-qty";
+//        try {
+//            restTemplate.exchange(DECREASING_PRODUCT_QTY_URL, HttpMethod.PUT, requestBody, Void.class);
+//        } catch (Exception e){
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
         try {
-            restTemplate.exchange(DECREASING_PRODUCT_QTY_URL, HttpMethod.PUT, requestBody, Void.class);
+            productServiceProxy.decreasingProductQty(order.getOrderItems());
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -136,11 +139,12 @@ public class OrderController {
     public ResponseEntity<?> confirmingCancelRequest(@PathVariable Long id){
         Order order = orderService.getOrderById(id);
 
-        HttpEntity<List<Item>> requestBody = new HttpEntity<>(order.getOrderItems());
+//        HttpEntity<List<Item>> requestBody = new HttpEntity<>(order.getOrderItems());
+//
+//        String INCREASING_PRODUCT_QTY_URL = "http://localhost:8081/api/products/increase-qty";
+//        restTemplate.exchange(INCREASING_PRODUCT_QTY_URL, HttpMethod.PUT, requestBody, Void.class);
 
-        String INCREASING_PRODUCT_QTY_URL = "http://localhost:8081/api/products/increase-qty";
-        restTemplate.exchange(INCREASING_PRODUCT_QTY_URL, HttpMethod.PUT, requestBody, Void.class);
-
+        productServiceProxy.increasingProductQty(order.getOrderItems());
         if (orderService.confirmCancelRequest(id) == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
