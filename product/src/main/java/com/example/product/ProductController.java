@@ -86,6 +86,5 @@ public class ProductController {
         productService.increaseProductQty(orderItems);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
 
