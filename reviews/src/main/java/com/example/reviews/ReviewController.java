@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -14,12 +13,12 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    private final RestTemplate restTemplate;
+    private final ProductServiceProxy productServiceProxy;
 
     @Autowired
-    public ReviewController(ReviewService reviewService, RestTemplate restTemplate) {
+    public ReviewController(ReviewService reviewService, ProductServiceProxy productServiceProxy) {
         this.reviewService = reviewService;
-        this.restTemplate = restTemplate;
+        this.productServiceProxy = productServiceProxy;
     }
 
 
@@ -55,8 +54,8 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<Review> addReview(@RequestBody Review review, @RequestParam(value = "product_id", required = true) Long product_id,
-                                            @RequestParam(value = "user_id", required = true) Long user_id){
+    public ResponseEntity<Review> addReview(@RequestBody Review review, @RequestParam(value = "product_id") Long product_id,
+                                            @RequestParam(value = "user_id") Long user_id){
         // Check if there exists review from the same person for the same product
         if(reviewService.isProductAndUserExist(product_id,user_id)) return new ResponseEntity<>(HttpStatus.CONFLICT);
 
@@ -66,8 +65,13 @@ public class ReviewController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
+//        try {
+//            restTemplate.put("http://localhost:8081/api/products/update-rating/" + product_id,review);
+//        } catch (Exception e){
+//            System.out.println(e);
+//        }
         try {
-            restTemplate.put("http://localhost:8081/api/products/update-rating/" + product_id,review);
+            productServiceProxy.updateRating(product_id, review);
         } catch (Exception e){
             System.out.println(e);
         }
