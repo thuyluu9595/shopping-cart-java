@@ -1,4 +1,4 @@
-package com.example.authorizationserver.security.config;
+package com.example.authorizationserver.dto;
 
 import com.example.authorizationserver.entity.User;
 import org.springframework.security.core.GrantedAuthority;

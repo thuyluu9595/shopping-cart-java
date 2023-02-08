@@ -2,7 +2,7 @@ package com.example.authorizationserver.security.services;
 
 import com.example.authorizationserver.entity.User;
 import com.example.authorizationserver.repository.UserRepository;
-import com.example.authorizationserver.security.config.UserDetailsConverter;
+import com.example.authorizationserver.dto.UserDetailsConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
