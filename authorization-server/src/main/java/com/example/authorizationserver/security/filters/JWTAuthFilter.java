@@ -1,8 +1,10 @@
 package com.example.authorizationserver.security.filters;
 
+import com.example.authorizationserver.entity.redis.TokenEntity;
+import com.example.authorizationserver.model.ConnValidationResponse;
 import com.example.authorizationserver.model.JWTAuthModel;
-import com.example.authorizationserver.security.config.SecurityConstants;
 import com.example.authorizationserver.service.redis.TokensRedisService;
+import com.example.authorizationserver.ultil.SecurityConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -11,11 +13,16 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -26,7 +33,7 @@ import java.util.Date;
 public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     private final TokensRedisService tokensRedisService;
 
@@ -52,6 +59,19 @@ public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
                                                 .setExpiration(Date.from(LocalDateTime.now().plusMinutes(30).toInstant(ZoneOffset.UTC)))
                                                         .signWith(SignatureAlgorithm.ES256, SecurityConstants.KEY)
                                                                 .compact();
-        super.successfulAuthentication(request, response, chain, authResult);
+
+        TokenEntity tokenEntity = TokenEntity.builder()
+                .email(authResult.getName())
+                .authToken(token)
+                .createdBy("SYSTEM").createdOn(LocalDateTime.now())
+                .modifiedBy("SYSTEM").modifiedOn(LocalDateTime.now())
+                .build();
+        tokensRedisService.save(tokenEntity);
+        response.addHeader(SecurityConstants.HEADER, String.format("Bearer %s", token));
+        response.addHeader("Expiration", String.valueOf(30*60));
+
+        ConnValidationResponse responseModel = ConnValidationResponse.builder().status(HttpStatus.OK.name()).token(String.format("Bearer %s", token)).methodType(HttpMethod.GET.name()).isAuthenticated(true).build();
+        response.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        response.getOutputStream().write(mapper.writeValueAsBytes(responseModel));
     }
 }

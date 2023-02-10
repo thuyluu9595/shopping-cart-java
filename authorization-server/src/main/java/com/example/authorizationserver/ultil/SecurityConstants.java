@@ -1,4 +1,4 @@
-package com.example.authorizationserver.security.config;
+package com.example.authorizationserver.ultil;
 
 import org.springframework.beans.factory.annotation.Value;
 
@@ -11,6 +11,9 @@ public class SecurityConstants {
 
     @Value("$security.jwt.key")
     public static String KEY;
+
+    @Value("$security.jwt.prefix")
+    public static String PREFIX;
 
     private SecurityConstants(){}
 }

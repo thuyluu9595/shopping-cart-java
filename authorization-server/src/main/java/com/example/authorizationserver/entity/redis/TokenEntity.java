@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RedisEntity {
+public class TokenEntity {
 
-    private String id;
+//    private String id;
 
     private String email;
     private String authToken;
