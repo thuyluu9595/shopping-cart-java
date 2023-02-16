@@ -1,6 +1,7 @@
 package com.example.authorizationserver.controller;
 
 import com.example.authorizationserver.entity.User;
+import com.example.authorizationserver.model.ConnValidationResponse;
 import com.example.authorizationserver.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Builder;
@@ -52,20 +53,17 @@ public class AuthorizationServerController {
     @GetMapping(value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ConnValidationResponse> validateGet(HttpServletRequest request){
         String email = request.getAttribute("email").toString();
+        String token = request.getAttribute("token").toString();
         List<GrantedAuthority> grantedAuthorities = (List<GrantedAuthority>) request.getAttribute("authorities");
         ConnValidationResponse response = ConnValidationResponse.builder().status("OK").methodType(HttpMethod.GET.name())
-                .email(email).authorities(grantedAuthorities).isAuthenticated(true).build();
+                .email(email).token(token).authorities(grantedAuthorities).isAuthenticated(true).build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Getter
-    @Builder
-    @ToString
-    public static class ConnValidationResponse {
-        private String status;
-        private boolean isAuthenticated;
-        private String methodType;
-        private String email;
-        private List<GrantedAuthority> authorities;
+    public ResponseEntity<ConnValidationResponse> validatePost(){
+        ConnValidationResponse response = ConnValidationResponse.builder().status("OK").methodType(HttpMethod.POST.name())
+                .isAuthenticated(true).build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 }

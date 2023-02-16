@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.RedisHash;
 
 import java.time.LocalDateTime;
 
+@Data
 @RedisHash(value= "Tokens", timeToLive = 86400)
 @Getter
 @Setter
