@@ -1,6 +1,7 @@
 package com.example.authorizationserver.security.config;
 
 import com.example.authorizationserver.security.filters.JWTAuthFilter;
+import com.example.authorizationserver.security.filters.JWTVerifierFilter;
 import com.example.authorizationserver.security.services.ApplicationUserDetailService;
 import com.example.authorizationserver.service.redis.TokensRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(new JWTAuthFilter(authenticationManager(),redisService))
+                .addFilterAfter(new JWTVerifierFilter(redisService), JWTVerifierFilter.class)
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/register", "/api/auth/home").permitAll()
                 .and()

@@ -66,6 +66,7 @@ public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
                 .createdBy("SYSTEM").createdOn(LocalDateTime.now())
                 .modifiedBy("SYSTEM").modifiedOn(LocalDateTime.now())
                 .build();
+
         tokensRedisService.save(tokenEntity);
         response.addHeader(SecurityConstants.HEADER, String.format("Bearer %s", token));
         response.addHeader("Expiration", String.valueOf(30*60));

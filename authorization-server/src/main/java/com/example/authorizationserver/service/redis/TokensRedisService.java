@@ -18,9 +18,9 @@ public class TokensRedisService {
         return redisRepository.save(entity);
     }
 
-    public Optional<TokenEntity> findById(String id){
-        return redisRepository.findById(id);
-    }
+//    public Optional<TokenEntity> findById(String id){
+//        return redisRepository.findById(id);
+//    }
 
     public Optional<TokenEntity> findByEmail(String email){
         return redisRepository.findByEmail(email);

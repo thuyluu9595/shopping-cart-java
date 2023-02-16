@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JWTVerifierFilter extends OncePerRequestFilter {
 
-    private TokensRedisService tokensRedisService;
+    private final TokensRedisService tokensRedisService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader(SecurityConstants.HEADER);
@@ -53,7 +53,7 @@ public class JWTVerifierFilter extends OncePerRequestFilter {
 
         request.setAttribute("email", email);
         request.setAttribute("authorities", grantedAuthorities);
-        request.setAttribute("jwt", authToken);
+        request.setAttribute("token", authToken);
 
         filterChain.doFilter(request, response);
     }
