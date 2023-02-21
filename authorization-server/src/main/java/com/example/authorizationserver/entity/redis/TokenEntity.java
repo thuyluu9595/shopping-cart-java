@@ -1,5 +1,6 @@
 package com.example.authorizationserver.entity.redis;
 
+import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.redis.core.RedisHash;
 
@@ -13,7 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TokenEntity {
 
-//    private String id;
+    @Id
+    private String id;
 
     private String email;
     private String authToken;

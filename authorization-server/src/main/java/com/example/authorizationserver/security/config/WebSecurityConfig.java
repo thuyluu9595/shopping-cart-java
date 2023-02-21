@@ -7,6 +7,8 @@ import com.example.authorizationserver.service.redis.TokensRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -19,6 +21,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 import java.util.Arrays;
 
@@ -28,10 +32,7 @@ import java.util.Arrays;
 public class WebSecurityConfig {
 
     @Autowired
-    private AuthenticationProvider authenticationProvider;
-
-    @Autowired
-    private TokensRedisService redisService;
+    private TokensRedisService tokensRedisService;
     @Bean
     public UserDetailsService userDetailsService(){
         return new ApplicationUserDetailService();
@@ -39,22 +40,27 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(){
-        return new ProviderManager(Arrays.asList(authenticationProvider));
+        return new ProviderManager(Arrays.asList(authenticationProvider()));
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf().disable()
+                .authorizeHttpRequests()
+                .requestMatchers("/api/v1/validateToken/register", "/api/v1/validateToken/home")
+                .permitAll()
+                .anyRequest()
+//                .authorizeHttpRequests().requestMatchers("/api/auth/**")
+                .authenticated()
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(new JWTAuthFilter(authenticationManager(),redisService))
-                .addFilterAfter(new JWTVerifierFilter(redisService), JWTVerifierFilter.class)
-                .authorizeHttpRequests()
-                .requestMatchers("/api/auth/register", "/api/auth/home").permitAll()
-                .and()
-                .authorizeHttpRequests().requestMatchers("/api/auth/**").authenticated()
-                .and()
-                .formLogin()
+                .authenticationProvider(authenticationProvider())
+                .addFilter(new JWTAuthFilter(authenticationManager(), tokensRedisService))
+                .addFilterAfter(new JWTVerifierFilter(tokensRedisService), JWTAuthFilter.class)
+//                .formLogin()
+//                .and()
+                .httpBasic()
                 .and().build();
     }
 
@@ -70,5 +76,6 @@ public class WebSecurityConfig {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
+
 }
 

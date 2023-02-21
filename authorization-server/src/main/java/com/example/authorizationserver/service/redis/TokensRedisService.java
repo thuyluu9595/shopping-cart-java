@@ -1,21 +1,23 @@
 package com.example.authorizationserver.service.redis;
 
 import com.example.authorizationserver.entity.redis.TokenEntity;
-import com.example.authorizationserver.repository.redis.RedisRepository;
+import com.example.authorizationserver.repository.redis.TokenRedisRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 public class TokensRedisService {
-    private final RedisRepository redisRepository;
+    @Autowired
+    private TokenRedisRepository tokenRedisRepository;
 
-    public TokensRedisService(RedisRepository redisRepository) {
-        this.redisRepository = redisRepository;
-    }
+//    public TokensRedisService(RedisRepository redisRepository) {
+//        this.redisRepository = redisRepository;
+//    }
 
     public TokenEntity save(TokenEntity entity){
-        return redisRepository.save(entity);
+        return tokenRedisRepository.save(entity);
     }
 
 //    public Optional<TokenEntity> findById(String id){
@@ -23,9 +25,9 @@ public class TokensRedisService {
 //    }
 
     public Optional<TokenEntity> findByEmail(String email){
-        return redisRepository.findByEmail(email);
+        return tokenRedisRepository.findByEmail(email);
     }
     public Iterable<TokenEntity> findAll(){
-        return redisRepository.findAll();
+        return tokenRedisRepository.findAll();
     }
 }

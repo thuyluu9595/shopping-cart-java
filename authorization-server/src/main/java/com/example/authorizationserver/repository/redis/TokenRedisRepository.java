@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
-public interface RedisRepository extends CrudRepository<TokenEntity,String> {
+@Repository("TokenRedisRepository")
+public interface TokenRedisRepository extends CrudRepository<TokenEntity,String> {
     Optional<TokenEntity> findByEmail(String email);
 }
