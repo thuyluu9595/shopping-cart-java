@@ -24,10 +24,10 @@ public class AuthorizationServerController {
         this.userService = userService;
     }
 
-//    @GetMapping("/home")
-//    public String home(){
-//        return "<h1>Welcome to Authorization Service</h1>";
-//    }
+    @GetMapping("/home")
+    public String home(){
+        return "<h1>Welcome to Authorization Service</h1>";
+    }
 //
 //    @GetMapping(value = "/user")
 //    @PreAuthorize("hasAuthority('USER')")

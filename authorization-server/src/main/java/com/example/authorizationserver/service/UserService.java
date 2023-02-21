@@ -1,5 +1,4 @@
 package com.example.authorizationserver.service;
-
 import com.example.authorizationserver.entity.User;
 import com.example.authorizationserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -25,7 +22,7 @@ public class UserService {
     }
 
     public void saveUser(User user){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(user.getPassword());
         userRepository.save(user);
     }
 }
