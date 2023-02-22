@@ -13,6 +13,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ import java.time.ZoneOffset;
 import java.util.Date;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
 
@@ -44,6 +46,7 @@ public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
             Authentication authentication = new UsernamePasswordAuthenticationToken(authModel.getEmail(), authModel.getPassword());
             return authenticationManager.authenticate(authentication);
         } catch (IOException e) {
+            log.error("Error message:", e);
             throw new RuntimeException(e);
         }
     }

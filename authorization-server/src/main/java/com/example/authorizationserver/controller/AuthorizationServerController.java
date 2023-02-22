@@ -28,11 +28,11 @@ public class AuthorizationServerController {
         return "<h1>Welcome to Authorization Service</h1>";
     }
 //
-//    @GetMapping(value = "/user")
-//    @PreAuthorize("hasAuthority('USER')")
-//    public String user(){
-//        return "<h1>Welcome to User Endpoint</h1>";
-//    }
+    @GetMapping(value = "/user")
+    @PreAuthorize("hasAuthority('USER')")
+    public String user(){
+        return "<h1>Welcome to User Endpoint</h1>";
+    }
 //
 //    @GetMapping(value = "/admin")
 //    @PreAuthorize("hasAuthority('ADMIN')")

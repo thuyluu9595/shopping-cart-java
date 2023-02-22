@@ -28,7 +28,7 @@ public class JWTVerifierFilter extends OncePerRequestFilter {
     private final TokensRedisService tokensRedisService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String header = request.getHeader(SecurityConstants.HEADER);
+        String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith(SecurityConstants.PREFIX)) {
             filterChain.doFilter(request, response);
             return;

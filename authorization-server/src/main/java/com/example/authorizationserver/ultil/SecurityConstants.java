@@ -1,19 +1,37 @@
 package com.example.authorizationserver.ultil;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SecurityConstants {
-    @Value("$security.jwt.header")
     public static String HEADER;
 
-    @Value("$security.jwt.issuer")
     public static String ISSUER;
 
-    @Value("$security.jwt.key")
     public static String KEY;
 
-    @Value("$security.jwt.prefix")
     public static String PREFIX;
 
-    private SecurityConstants(){}
+    @Value("${security.jwt.header}")
+    public void setHEADER(String header){
+        HEADER = header;
+    }
+
+    @Value("${security.jwt.issuer}")
+    public void setISSUER(String issuer){
+        ISSUER = issuer;
+    }
+
+    @Value("${security.jwt.key}")
+    public void setKEY(String key){
+        KEY = key;
+    }
+
+    @Value("${security.jwt.prefix}")
+    public void setPREFIX(String prefix){
+        PREFIX = prefix;
+    }
+
+    public SecurityConstants(){}
 }

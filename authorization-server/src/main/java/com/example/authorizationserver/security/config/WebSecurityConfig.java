@@ -55,7 +55,7 @@ public class WebSecurityConfig {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authenticationProvider(authenticationProvider())
+//                .authenticationProvider(authenticationProvider())
                 .addFilter(new JWTAuthFilter(authenticationManager(), tokensRedisService))
                 .addFilterAfter(new JWTVerifierFilter(tokensRedisService), JWTAuthFilter.class)
 //                .formLogin()
