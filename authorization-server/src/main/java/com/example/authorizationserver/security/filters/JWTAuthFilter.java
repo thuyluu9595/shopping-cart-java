@@ -23,6 +23,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
@@ -31,6 +32,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -55,12 +57,10 @@ public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        HashMap<String, String> hashMap = new HashMap<>();
         String id = Utilities.generateUuid();
-        hashMap.put("email",authResult.getName());
-        hashMap.put("id",id);
         String token = Jwts.builder()
-                .setSubject(String.valueOf(hashMap))
+                .setId(id)
+                .setSubject(authResult.getName())
                 .claim("authorities", authResult.getAuthorities())
                 .setIssuedAt(new Date())
                 .setIssuer(SecurityConstants.ISSUER)
@@ -80,7 +80,14 @@ public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
         response.addHeader(SecurityConstants.HEADER, String.format("Bearer %s", token));
         response.addHeader("Expiration", String.valueOf(30*60));
 
-        ConnValidationResponse responseModel = ConnValidationResponse.builder().status(HttpStatus.OK.name()).token(String.format("Bearer %s", token)).methodType(HttpMethod.GET.name()).isAuthenticated(true).build();
+        ConnValidationResponse responseModel = ConnValidationResponse.builder()
+                .status(HttpStatus.OK.name())
+                .token(String.format("Bearer %s", token))
+                .methodType(HttpMethod.GET.name())
+                .isAuthenticated(true)
+                .email(authResult.getName())
+                .authorities((List<GrantedAuthority>) authResult.getAuthorities())
+                .build();
         response.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         response.getOutputStream().write(mapper.writeValueAsBytes(responseModel));
     }

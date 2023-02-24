@@ -1,16 +1,13 @@
 package com.example.authorizationserver.controller;
 
 import com.example.authorizationserver.entity.User;
-import com.example.authorizationserver.model.JWTAuthModel;
 import com.example.authorizationserver.service.UserService;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
-
+import com.example.authorizationserver.model.ConnValidationResponse;
 import java.util.List;
 
 @RestController
@@ -29,16 +26,16 @@ public class AuthorizationServerController {
     }
 //
     @GetMapping(value = "/user")
-//    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public String user(){
         return "<h1>Welcome to User Endpoint</h1>";
     }
 //
-//    @GetMapping(value = "/admin")
-//    @PreAuthorize("hasAuthority('ADMIN')")
-//    public String admin(){
-//        return "<h1>Welcome to Admin Endpoint</h1>";
-//    }
+    @GetMapping(value = "/admin")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String admin(){
+        return "<h1>Welcome to Admin Endpoint</h1>";
+    }
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user){
@@ -49,26 +46,21 @@ public class AuthorizationServerController {
         }
         return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
-    @PostMapping(value = "/login")
-    public ResponseEntity<ConnValidationResponse> loginPost(@RequestBody JWTAuthModel user){
-        String email = user.getEmail();
-        String pwd = user.getPassword();
+    @GetMapping("")
+    public ResponseEntity<ConnValidationResponse> validateToken(HttpServletRequest request){
 
-//        String email = request.getAttribute("email").toString();
-//        List<GrantedAuthority> grantedAuthorities = (List<GrantedAuthority>) request.getAttribute("authorities");
-//        ConnValidationResponse response = ConnValidationResponse.builder().status("OK").methodType(HttpMethod.GET.name())
-//                .email(email).authorities(grantedAuthorities).isAuthenticated(true).build();
-        return new ResponseEntity<>(HttpStatus.OK);
+        String email = request.getAttribute("email").toString();
+        String token = request.getAttribute("token").toString();
+        List<GrantedAuthority> grantedAuthorities = (List<GrantedAuthority>) request.getAttribute("authorities");
+        ConnValidationResponse response = ConnValidationResponse.builder()
+                .status("OK")
+                .methodType(HttpMethod.GET.name())
+                .email(email)
+                .authorities(grantedAuthorities)
+                .isAuthenticated(true)
+                .token(token)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Getter
-    @Builder
-    @ToString
-    public static class ConnValidationResponse {
-        private String status;
-        private boolean isAuthenticated;
-        private String methodType;
-        private String email;
-        private List<GrantedAuthority> authorities;
-    }
 }

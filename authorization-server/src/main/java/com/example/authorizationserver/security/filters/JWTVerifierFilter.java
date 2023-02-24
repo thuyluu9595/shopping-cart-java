@@ -37,9 +37,9 @@ public class JWTVerifierFilter extends OncePerRequestFilter {
 
         String authToken = header.substring(7);
         Jws<Claims> claims = Jwts.parser().setSigningKey(SecurityConstants.KEY.getBytes()).requireIssuer(SecurityConstants.ISSUER).parseClaimsJws(authToken);
-        String id = claims.getBody().getSubject().substring(4,40);
-        String email = claims.getBody().getSubject().substring(48).replace("}","");
-        System.out.println(id + " " + email);
+        String id = claims.getBody().getId();
+        String email = claims.getBody().getSubject();
+
         if (tokensRedisService.findById(id).isEmpty()){
             filterChain.doFilter(request, response);
             return;

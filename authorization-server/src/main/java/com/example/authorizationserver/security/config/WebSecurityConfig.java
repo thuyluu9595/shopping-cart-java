@@ -7,8 +7,7 @@ import com.example.authorizationserver.service.redis.TokensRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -21,8 +20,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
-import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+
 
 import java.util.Arrays;
 
@@ -50,16 +48,12 @@ public class WebSecurityConfig {
                 .requestMatchers("/api/v1/validateToken/register", "/api/v1/validateToken/home")
                 .permitAll()
                 .anyRequest()
-//                .authorizeHttpRequests().requestMatchers("/api/auth/**")
                 .authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-//                .authenticationProvider(authenticationProvider())
                 .addFilter(new JWTAuthFilter(authenticationManager(), tokensRedisService))
                 .addFilterAfter(new JWTVerifierFilter(tokensRedisService), JWTAuthFilter.class)
-//                .formLogin()
-//                .and()
                 .httpBasic()
                 .and().build();
     }
