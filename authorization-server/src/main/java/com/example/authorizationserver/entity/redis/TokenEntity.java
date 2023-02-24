@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TokenEntity {
 
-    @Id
+
     private String id;
 
     private String email;

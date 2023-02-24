@@ -30,4 +30,8 @@ public class TokensRedisService {
     public Iterable<TokenEntity> findAll(){
         return tokenRedisRepository.findAll();
     }
+
+    public Optional<TokenEntity> findById(String id) {
+        return tokenRedisRepository.findById(id);
+    }
 }

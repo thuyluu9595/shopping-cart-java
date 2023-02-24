@@ -29,7 +29,7 @@ public class AuthorizationServerController {
     }
 //
     @GetMapping(value = "/user")
-    @PreAuthorize("hasAuthority('USER')")
+//    @PreAuthorize("hasAuthority('USER')")
     public String user(){
         return "<h1>Welcome to User Endpoint</h1>";
     }

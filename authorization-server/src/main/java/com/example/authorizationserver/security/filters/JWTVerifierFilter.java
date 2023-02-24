@@ -28,7 +28,7 @@ public class JWTVerifierFilter extends OncePerRequestFilter {
     private final TokensRedisService tokensRedisService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("verifyAuth");
+
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith(SecurityConstants.PREFIX)) {
             filterChain.doFilter(request, response);
@@ -37,12 +37,14 @@ public class JWTVerifierFilter extends OncePerRequestFilter {
 
         String authToken = header.substring(7);
         Jws<Claims> claims = Jwts.parser().setSigningKey(SecurityConstants.KEY.getBytes()).requireIssuer(SecurityConstants.ISSUER).parseClaimsJws(authToken);
-        String email = claims.getBody().getSubject();
-        if (tokensRedisService.findByEmail(email).isEmpty()){
+        String id = claims.getBody().getSubject().substring(4,40);
+        String email = claims.getBody().getSubject().substring(48).replace("}","");
+        System.out.println(id + " " + email);
+        if (tokensRedisService.findById(id).isEmpty()){
             filterChain.doFilter(request, response);
             return;
         }
-        if (!tokensRedisService.findByEmail(email).get().getAuthToken().equals(authToken)){
+        if (!tokensRedisService.findById(id).get().getAuthToken().equals(authToken)){
             filterChain.doFilter(request, response);
             return;
         }
@@ -55,6 +57,7 @@ public class JWTVerifierFilter extends OncePerRequestFilter {
         request.setAttribute("email", email);
         request.setAttribute("authorities", grantedAuthorities);
         request.setAttribute("token", authToken);
+
         filterChain.doFilter(request, response);
     }
 }
