@@ -42,6 +42,7 @@ public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
+            System.out.println("AttemptAuth ");
             JWTAuthModel authModel = mapper.readValue(request.getInputStream(), JWTAuthModel.class);
             Authentication authentication = new UsernamePasswordAuthenticationToken(authModel.getEmail(), authModel.getPassword());
             return authenticationManager.authenticate(authentication);
@@ -53,16 +54,15 @@ public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
-                        .claim("authorities", authResult.getAuthorities())
-                                .setIssuedAt(new Date())
-                                        .setIssuer(SecurityConstants.ISSUER)
-                                                .setExpiration(Date.from(LocalDateTime.now().plusMinutes(30).toInstant(ZoneOffset.UTC)))
-                                                        .signWith(SignatureAlgorithm.ES256, SecurityConstants.KEY)
-                                                                .compact();
-
+                .claim("authorities", authResult.getAuthorities())
+                .setIssuedAt(new Date())
+                .setIssuer(SecurityConstants.ISSUER)
+                .setExpiration(Date.from(LocalDateTime.now().plusHours(24).toInstant(ZoneOffset.UTC)))
+                .signWith(SignatureAlgorithm.HS256, SecurityConstants.KEY.getBytes())
+                .compact();
+        System.out.println(token);
         TokenEntity tokenEntity = TokenEntity.builder()
                 .email(authResult.getName())
                 .authToken(token)

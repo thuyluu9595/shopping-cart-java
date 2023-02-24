@@ -1,8 +1,8 @@
 package com.example.authorizationserver.controller;
 
 import com.example.authorizationserver.entity.User;
+import com.example.authorizationserver.model.JWTAuthModel;
 import com.example.authorizationserver.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -49,13 +49,16 @@ public class AuthorizationServerController {
         }
         return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
-    @GetMapping(value = "", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ConnValidationResponse> validateGet(HttpServletRequest request){
-        String email = request.getAttribute("email").toString();
-        List<GrantedAuthority> grantedAuthorities = (List<GrantedAuthority>) request.getAttribute("authorities");
-        ConnValidationResponse response = ConnValidationResponse.builder().status("OK").methodType(HttpMethod.GET.name())
-                .email(email).authorities(grantedAuthorities).isAuthenticated(true).build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    @PostMapping(value = "/login")
+    public ResponseEntity<ConnValidationResponse> loginPost(@RequestBody JWTAuthModel user){
+        String email = user.getEmail();
+        String pwd = user.getPassword();
+
+//        String email = request.getAttribute("email").toString();
+//        List<GrantedAuthority> grantedAuthorities = (List<GrantedAuthority>) request.getAttribute("authorities");
+//        ConnValidationResponse response = ConnValidationResponse.builder().status("OK").methodType(HttpMethod.GET.name())
+//                .email(email).authorities(grantedAuthorities).isAuthenticated(true).build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Getter
