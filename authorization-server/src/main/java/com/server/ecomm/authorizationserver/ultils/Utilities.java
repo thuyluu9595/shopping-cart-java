@@ -1,8 +1,7 @@
-package com.server.ecomm.authorizationserver.ultil;
+package com.server.ecomm.authorizationserver.ultils;
 
 //public class Utilities {
 //}
-import java.util.Map;
 import java.util.UUID;
 
 public class Utilities {

@@ -1,7 +1,7 @@
 package com.server.ecomm.authorizationserver.security.filters;
 
 import com.server.ecomm.authorizationserver.service.redis.TokensRedisService;
-import com.server.ecomm.authorizationserver.ultil.SecurityConstants;
+import com.server.ecomm.authorizationserver.ultils.SecurityConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
