@@ -51,6 +51,7 @@ public class AuthorizationServerController {
 
         String email = request.getAttribute("email").toString();
         String token = request.getAttribute("token").toString();
+        System.out.println(email + " " + token);
         List<GrantedAuthority> grantedAuthorities = (List<GrantedAuthority>) request.getAttribute("authorities");
         ConnValidationResponse response = ConnValidationResponse.builder()
                 .status("OK")

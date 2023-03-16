@@ -27,7 +27,7 @@ public class DefaultConfig {
     @Bean
     public RouteLocator customRouteConfig(RouteLocatorBuilder builder, AuthFilter authFilter){
         return builder.routes()
-                .route("authentication-server",r -> r.path("/authentication-service/**")
+                .route("authentication-service",r -> r.path("/authentication-service/**")
                         .filters(f ->
                                 f.rewritePath("/authentication-service(?<segment>/?.*)","$\\{segment}")
                                         .filter(authFilter.apply(new AuthFilter.Config())))
