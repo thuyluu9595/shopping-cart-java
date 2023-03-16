@@ -47,22 +47,10 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
             log.info("BearerToken " + bearerToken);
 
             if (isSecured.test(request)) {
-                return webClientBuilder.build().get()
-                        .uri("lb://user-service/api/users/home")
-                        .retrieve().bodyToMono(ConnValidationResponse.class)
-                        .map(response -> exchange)
-                        .flatMap(chain::filter);
-//                return webClientBuilder.build().get()                                               // build a get request
+//                return webClientBuilder.build().get()
 //                        .uri("lb://authentication-service/api/v1/validateToken")
-//                        .header(SecurityConstants.HEADER, bearerToken)
-//                        .retrieve().bodyToMono(ConnValidationResponse.class)                        // execute the request and deserialize its response body to ConnValidationResponse.class
-//                        .map(response -> {                                                          // add info to the header of incoming request
-//                            exchange.getRequest().mutate().header("email", response.getEmail());
-//                            exchange.getRequest().mutate().header("token", response.getToken());
-//                            exchange.getRequest().mutate().header("authorities", response.getAuthorities().stream().map(Authorities::getAuthority)
-//                                    .reduce("", (a,b) -> a + "," + b));
-//                            return exchange;
-//                        })
+//                        .retrieve().bodyToMono(ConnValidationResponse.class)
+//                        .map(response -> exchange)
 //                        .flatMap(chain::filter).onErrorResume(error ->{
 //                            log.info("Error happened " + error.toString());
 //                            HttpStatusCode errorCode = null;
@@ -76,8 +64,34 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
 //                                errorMsg = HttpStatus.BAD_GATEWAY.getReasonPhrase();
 //                            }
 //                            return onError(exchange, String.valueOf(errorCode.value()), errorMsg, errorCode);
-//                        });                                                    // return the exchange object to the next filter in the chain
+//                        });
+                return webClientBuilder.build().get()                                               // build a get request
+                        .uri("lb://authentication-service/api/v1/validateToken")
+                        .header(SecurityConstants.HEADER, bearerToken)
+                        .retrieve().bodyToMono(ConnValidationResponse.class)                        // execute the request and deserialize its response body to ConnValidationResponse.class
+                        .map(response -> {                                                          // add info to the header of incoming request
+                            exchange.getRequest().mutate().header("email", response.getEmail());
+                            exchange.getRequest().mutate().header("token", response.getToken());
+                            exchange.getRequest().mutate().header("authorities", response.getAuthorities().stream().map(Authorities::getAuthority)
+                                    .reduce("", (a,b) -> a + "," + b));
+                            return exchange;
+                        })
+                        .flatMap(chain::filter).onErrorResume(error ->{
+                            log.info("Error happened " + error.toString());
+                            HttpStatusCode errorCode = null;
+                            String errorMsg = "";
+                            if(error instanceof WebClientResponseException){
+                                WebClientResponseException webClientResponseException = (WebClientResponseException) error;
+                                errorCode = webClientResponseException.getStatusCode();
+                                errorMsg = webClientResponseException.getMessage();
+                            } else {
+                                errorCode = HttpStatus.BAD_GATEWAY;
+                                errorMsg = HttpStatus.BAD_GATEWAY.getReasonPhrase();
+                            }
+                            return onError(exchange, String.valueOf(errorCode.value()), errorMsg, errorCode);
+                        });                                                    // return the exchange object to the next filter in the chain
             }
+            log.info("Route not secured!");
             return chain.filter(exchange);
         });
     }
