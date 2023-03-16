@@ -44,7 +44,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
         return ((exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
             String bearerToken = request.getHeaders().getFirst(SecurityConstants.HEADER);
-            log.info(SecurityConstants.HEADER + bearerToken);
+            log.info(SecurityConstants.HEADER + " " + bearerToken);
 
             if (isSecured.test(request)) {
 //                return webClientBuilder.build().get()
