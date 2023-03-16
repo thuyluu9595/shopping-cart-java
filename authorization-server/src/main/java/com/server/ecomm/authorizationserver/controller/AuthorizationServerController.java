@@ -3,6 +3,7 @@ package com.server.ecomm.authorizationserver.controller;
 import com.server.ecomm.authorizationserver.entity.User;
 import com.server.ecomm.authorizationserver.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/validateToken")
+@Slf4j
 public class AuthorizationServerController {
 
     private final UserService userService;
@@ -51,7 +53,7 @@ public class AuthorizationServerController {
 
         String email = request.getAttribute("email").toString();
         String token = request.getAttribute("token").toString();
-        System.out.println(email + " " + token);
+        log.info(email + " " + token);
         List<GrantedAuthority> grantedAuthorities = (List<GrantedAuthority>) request.getAttribute("authorities");
         ConnValidationResponse response = ConnValidationResponse.builder()
                 .status("OK")
