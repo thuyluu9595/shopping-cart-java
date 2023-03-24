@@ -3,6 +3,7 @@ package com.server.ecomm.order;
 import com.server.ecomm.order.models.Order;
 import com.server.ecomm.order.proxies.ProductServiceProxy;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,7 @@ public class OrderController {
      */
     @PostMapping
     @CircuitBreaker(name="default", fallbackMethod = "createOrderFallback")
+    @RateLimiter(name = "createOrder")
     public ResponseEntity<Order> createOrder(@RequestBody Order order){
 //        HttpEntity<List<Item>> requestBody = new HttpEntity<>(order.getOrderItems());
 //
@@ -67,9 +69,9 @@ public class OrderController {
         return new ResponseEntity<>(created_order, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<?> createOrderFallback(Order order, Exception e){
+    public ResponseEntity<?> createOrderFallback(Exception e){
         log.error(e.toString());
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     /**

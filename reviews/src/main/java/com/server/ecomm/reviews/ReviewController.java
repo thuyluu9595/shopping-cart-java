@@ -1,5 +1,6 @@
 package com.server.ecomm.reviews;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,6 +57,7 @@ public class ReviewController {
     }
 
     @PostMapping
+    @RateLimiter(name = "addReview")
     public ResponseEntity<Review> addReview(@RequestBody Review review, @RequestParam(value = "product_id") Long product_id,
                                             @RequestParam(value = "user_id") Long user_id){
         // Check if there exists review from the same person for the same product
