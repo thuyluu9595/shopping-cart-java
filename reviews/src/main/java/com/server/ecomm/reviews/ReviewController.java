@@ -1,5 +1,6 @@
 package com.server.ecomm.reviews;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/reviews")
+@Slf4j
 public class ReviewController {
 
     private final ReviewService reviewService;
@@ -64,15 +66,11 @@ public class ReviewController {
         if(created_review == null){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-//        try {
-//            restTemplate.put("http://localhost:8081/api/products/update-rating/" + product_id,review);
-//        } catch (Exception e){
-//            System.out.println(e);
-//        }
+
         try {
             productServiceProxy.updateRating(product_id, review);
         } catch (Exception e){
-            System.out.println(e);
+            log.warn(e.toString());
         }
         return new ResponseEntity<>(review, HttpStatus.CREATED);
     }

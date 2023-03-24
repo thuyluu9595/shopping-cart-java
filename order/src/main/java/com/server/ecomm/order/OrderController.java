@@ -2,6 +2,8 @@ package com.server.ecomm.order;
 
 import com.server.ecomm.order.models.Order;
 import com.server.ecomm.order.proxies.ProductServiceProxy;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
+@Slf4j
 public class OrderController {
 
     private final OrderService orderService;
@@ -44,6 +47,7 @@ public class OrderController {
      * @return : new order
      */
     @PostMapping
+    @CircuitBreaker(name="default", fallbackMethod = "createOrderFallback")
     public ResponseEntity<Order> createOrder(@RequestBody Order order){
 //        HttpEntity<List<Item>> requestBody = new HttpEntity<>(order.getOrderItems());
 //
@@ -53,11 +57,7 @@ public class OrderController {
 //        } catch (Exception e){
 //            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 //        }
-        try {
-            productServiceProxy.decreasingProductQty(order.getOrderItems());
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        productServiceProxy.decreasingProductQty(order.getOrderItems());
 
         Order created_order = orderService.createOrder(order);
 
@@ -65,6 +65,11 @@ public class OrderController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         return new ResponseEntity<>(created_order, HttpStatus.CREATED);
+    }
+
+    public ResponseEntity<?> createOrderFallback(Order order, Exception e){
+        log.error(e.toString());
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     /**
