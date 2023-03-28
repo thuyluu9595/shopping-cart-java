@@ -60,6 +60,7 @@ public class ReviewController {
     @RateLimiter(name = "addReview")
     public ResponseEntity<Review> addReview(@RequestBody Review review, @RequestParam(value = "product_id") Long product_id,
                                             @RequestParam(value = "user_id") Long user_id){
+        log.info("Product Id is {} and User Id is {}", product_id, user_id);
         // Check if there exists review from the same person for the same product
         if(reviewService.isProductAndUserExist(product_id,user_id)) return new ResponseEntity<>(HttpStatus.CONFLICT);
 

@@ -51,6 +51,7 @@ public class OrderController {
     @CircuitBreaker(name="default", fallbackMethod = "createOrderFallback")
     @RateLimiter(name = "createOrder")
     public ResponseEntity<Order> createOrder(@RequestBody Order order){
+        log.info("UserId {} created an order", order.getUserId());
 //        HttpEntity<List<Item>> requestBody = new HttpEntity<>(order.getOrderItems());
 //
 //        String DECREASING_PRODUCT_QTY_URL = "http://localhost:8081/api/products/decrease-qty";
