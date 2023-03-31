@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id){
+    public ResponseEntity<User> getUserById(@PathVariable long id){
         User user = userService.getUserById(id);
         if (user == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user){
+    public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody User user){
         if (userService.updateUserAdmin(id, user) == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id){
+    public ResponseEntity<?> deleteUser(@PathVariable long id){
         if (userService.deleteUser(id))
             return new ResponseEntity<>(HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -61,7 +61,7 @@ public class UserController {
 
     // Need to fix. Get user id via current login user
     @PutMapping("/profile/{id}")
-    public ResponseEntity<User> updateProfile(@PathVariable Long id, @RequestBody User user){
+    public ResponseEntity<User> updateProfile(@PathVariable long id, @RequestBody User user){
         if (userService.updateUser(id, user) == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

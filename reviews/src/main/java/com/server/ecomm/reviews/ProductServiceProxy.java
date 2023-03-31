@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name= "product-service", url = "localhost:8081")
 public interface ProductServiceProxy {
-    @PutMapping("/api/products/update-rating/{id}")
-    void updateRating(@PathVariable Long id,
+    @PutMapping("/api/v1/products/update-rating/{id}")
+    void updateRating(@PathVariable long id,
                       @RequestBody Review review);
 }
