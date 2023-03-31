@@ -11,4 +11,6 @@ Shopping cart application based on microservice architecture.
 
 ### Order service
 
+### API gateway
+- [ ] May add filter that do authorize job before routing a request
 ### Testing
