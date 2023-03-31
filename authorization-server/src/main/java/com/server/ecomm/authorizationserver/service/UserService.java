@@ -19,8 +19,34 @@ public class UserService {
         return user.orElse(null);
     }
 
-    public void saveUser(User user){
-        user.setPassword(user.getPassword());
+    public boolean addUser(User user){
+        User existed_user = findUserByEmail(user.getEmail());
+        if(existed_user != null){
+            return false;
+        }
         userRepository.save(user);
+        return true;
+    }
+
+    public boolean updateUser(User user){
+        User existed_user = findUserByEmail(user.getEmail());
+        if(existed_user == null){
+            return false;
+        }else{
+            existed_user.setEmail(user.getEmail());
+            existed_user.setPassword(user.getPassword());
+            existed_user.setRole(user.getRole());
+            userRepository.save(existed_user);
+            return true;
+        }
+    }
+
+    public boolean deleteUser(User user){
+        User existed_user = findUserByEmail(user.getEmail());
+        if(existed_user != null){
+            userRepository.delete(existed_user);
+            return true;
+        }
+        return false;
     }
 }
