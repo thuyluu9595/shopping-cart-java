@@ -40,13 +40,27 @@ public class AuthorizationServerController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user){
-        User existed_user = userService.findUserByEmail(user.getEmail());
-        if(existed_user == null){
-            userService.saveUser(user);
+    public ResponseEntity<User> registerUser(@RequestBody User user){
+        if(userService.addUser(user)){
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<User> updateUser(@RequestBody User user){
+        if(userService.updateUser(user)){
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteUser(@RequestBody User user){
+        if(userService.deleteUser(user)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     @GetMapping("")
     public ResponseEntity<ConnValidationResponse> validateToken(HttpServletRequest request){

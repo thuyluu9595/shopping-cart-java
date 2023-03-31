@@ -19,9 +19,13 @@ public class UserService {
         return user.orElse(null);
     }
 
+    public boolean isUserExisted(String email){
+        Optional<User> user = userRepository.findByEmail(email);
+        return user.isPresent();
+    }
+
     public boolean addUser(User user){
-        User existed_user = findUserByEmail(user.getEmail());
-        if(existed_user != null){
+        if(isUserExisted(user.getEmail())){
             return false;
         }
         userRepository.save(user);
