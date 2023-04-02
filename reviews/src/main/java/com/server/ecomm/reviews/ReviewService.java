@@ -49,7 +49,7 @@ public class ReviewService {
 
     }
 
-    public boolean isProductAndUserExist(Long product_id, Long user_id){
+    public boolean isProductAndUserExist(long product_id, long user_id){
         return !reviewRepository.findByProductIdAndUserId(product_id, user_id).isEmpty();
     }
 

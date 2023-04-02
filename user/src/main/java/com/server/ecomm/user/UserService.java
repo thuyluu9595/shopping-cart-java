@@ -19,18 +19,19 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserById(long id){
+    public User getUserById(Long id){
         return userRepository.findById(id).orElse(null);
     }
 
     public User addUser(User user){
-        if (userRepository.findUserByName(user.getName()) != null && userRepository.findUserByEmail(user.getEmail()) != null){
+        User userByEmail = userRepository.findUserByEmail(user.getEmail());
+        if (userByEmail != null){
             return null;
         }
         return userRepository.save(user);
     }
 
-    public User updateUser(long id, User user){
+    public User updateUser(Long id, User user){
         User existUser = userRepository.findById(id).orElse(null);
         if (existUser == null){
             return null;
@@ -42,7 +43,7 @@ public class UserService {
         return userRepository.save(existUser);
     }
 
-    public User updateUserAdmin(long id, User user){
+    public User updateUserAdmin(Long id, User user){
         User savedUser = userRepository.findById(id).orElse(null);
         if (savedUser == null){
             return null;
@@ -54,7 +55,7 @@ public class UserService {
         return userRepository.save(savedUser);
     }
 
-    public boolean deleteUser(long id){
+    public boolean deleteUser(Long id){
         try {
             userRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e){

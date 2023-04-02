@@ -6,7 +6,7 @@ import java.util.List;
 
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    List<Review> findByProductIdAndUserId(Long productId, Long userId);
-    List<Review> findByUserId(Long userId);
-    List<Review> findByProductId(Long productId);
+    List<Review> findByProductIdAndUserId(long productId, long userId);
+    List<Review> findByUserId(long userId);
+    List<Review> findByProductId(long productId);
 }
