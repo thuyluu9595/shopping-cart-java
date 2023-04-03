@@ -3,8 +3,9 @@ Shopping cart application based on microservice architecture.
 ## TODO tasks
 ### Auth service
 - [x] Create routes for create, update, remove sign-in user info
+- [ ] Implement SSO
 ### User service
-- [ ] Create requests to auth service when user create, update, delete info.
+- [x] Create requests to auth service when user create, update, delete info.
 - [ ] Get user id via user login token.
 ### Product service
 - [ ] Update ResponseEntity for all routes
@@ -13,5 +14,5 @@ Shopping cart application based on microservice architecture.
 ### Order service
 
 ### API gateway
-- [ ] May add filter that do authorize job before routing a request
+
 ### Testing
