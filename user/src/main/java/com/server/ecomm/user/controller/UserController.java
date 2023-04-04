@@ -1,5 +1,8 @@
-package com.server.ecomm.user;
+package com.server.ecomm.user.controller;
 
+import com.server.ecomm.user.config.proxy.AuthServiceProxy;
+import com.server.ecomm.user.entity.User;
+import com.server.ecomm.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,18 +67,17 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<User> createUser(@RequestBody User user){
-        User createdUser = userService.addUser(user);
-
-        if (createdUser == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
         try {
+            User createdUser = userService.addUser(user);
+            if (createdUser == null){
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
             authServiceProxy.createUser(user);
+
         } catch (Exception e){
             log.error(e.toString());
         }
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     // Need to fix. Get user id via current login user

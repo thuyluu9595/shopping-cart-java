@@ -1,5 +1,6 @@
-package com.server.ecomm.user;
+package com.server.ecomm.user.config.proxy;
 
+import com.server.ecomm.user.entity.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;

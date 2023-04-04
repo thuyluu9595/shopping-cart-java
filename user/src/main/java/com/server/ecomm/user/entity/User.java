@@ -1,4 +1,4 @@
-package com.server.ecomm.user;
+package com.server.ecomm.user.entity;
 
 import jakarta.persistence.*;
 
