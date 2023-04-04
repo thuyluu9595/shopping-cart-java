@@ -19,7 +19,6 @@ public class UserController {
     private final UserService userService;
     private final AuthServiceProxy authServiceProxy;
 
-    @Autowired
     public UserController(UserService userService, AuthServiceProxy authServiceProxy) {
         this.userService = userService;
         this.authServiceProxy = authServiceProxy;
@@ -45,7 +44,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user){
+    public ResponseEntity<HttpStatus> updateUser(@PathVariable Long id, @RequestBody User user){
         if (userService.updateUserAdmin(id, user) == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -53,16 +52,16 @@ public class UserController {
         try {
             authServiceProxy.updateUser(user);
         } catch (Exception e){
-            log.error(e.toString());
+            log.error(e.getMessage(), e);
         }
         return new ResponseEntity<>((HttpStatus.OK));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id){
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id){
         if (userService.deleteUser(id))
             return new ResponseEntity<>(HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/register")
@@ -80,11 +79,10 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    // Need to fix. Get user id via current login user
     @PutMapping("/profile/{id}")
     public ResponseEntity<User> updateProfile(@PathVariable Long id, @RequestBody User user){
         if (userService.updateUser(id, user) == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
