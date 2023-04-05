@@ -1,4 +1,4 @@
-# SHOPPING-CART MICROSERVICE
+# E-COMMERCE APPLICATION (MICROSERVICES)
 Shopping cart application based on microservice architecture.
 ## TODO tasks
 ### Auth service
@@ -14,5 +14,5 @@ Shopping cart application based on microservice architecture.
 ### Order service
 
 ### API gateway
-
+- [ ] Implement distributed cache
 ### Testing

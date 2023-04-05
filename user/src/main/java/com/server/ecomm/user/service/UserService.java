@@ -3,7 +3,6 @@ package com.server.ecomm.user.service;
 import com.server.ecomm.user.entity.User;
 import com.server.ecomm.user.repository.UserRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,11 +11,9 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -33,7 +30,7 @@ public class UserService {
         if (userByEmail != null){
             return null;
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -45,7 +42,7 @@ public class UserService {
 
         existUser.setName(user.getName());
         existUser.setEmail(user.getEmail());
-        existUser.setPassword(passwordEncoder.encode(user.getPassword()));
+//        existUser.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(existUser);
     }
 
