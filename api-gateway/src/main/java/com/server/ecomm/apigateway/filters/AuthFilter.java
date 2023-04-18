@@ -47,24 +47,6 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
             log.info(SecurityConstants.HEADER + " " + bearerToken);
 
             if (isSecured.test(request)) {
-//                return webClientBuilder.build().get()
-//                        .uri("lb://authentication-service/api/v1/validateToken")
-//                        .retrieve().bodyToMono(ConnValidationResponse.class)
-//                        .map(response -> exchange)
-//                        .flatMap(chain::filter).onErrorResume(error ->{
-//                            log.info("Error happened " + error.toString());
-//                            HttpStatusCode errorCode = null;
-//                            String errorMsg = "";
-//                            if(error instanceof WebClientResponseException){
-//                                WebClientResponseException webClientResponseException = (WebClientResponseException) error;
-//                                errorCode = webClientResponseException.getStatusCode();
-//                                errorMsg = webClientResponseException.getMessage();
-//                            } else {
-//                                errorCode = HttpStatus.BAD_GATEWAY;
-//                                errorMsg = HttpStatus.BAD_GATEWAY.getReasonPhrase();
-//                            }
-//                            return onError(exchange, String.valueOf(errorCode.value()), errorMsg, errorCode);
-//                        });
                 return webClientBuilder.build().get()                                               // build a get request
                         .uri("lb://authentication-service/api/v1/validateToken")
                         .header(SecurityConstants.HEADER, bearerToken)
@@ -96,7 +78,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
     }
 
     private Mono<? extends Void> onError(ServerWebExchange exchange, String errCode, String errMsg, HttpStatusCode errorStatusCode) {
-        log.error("JWT Authentication Failed");
+        log.warn("JWT Authentication Failed");
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(errorStatusCode);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);

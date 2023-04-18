@@ -1,6 +1,7 @@
 package com.server.ecomm.user.security.filter;
 
 import com.server.ecomm.user.ultil.SecurityConstants;
+import com.server.ecomm.user.ultil.Ultilities;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,7 +40,7 @@ public class JWTVerifierFilter extends OncePerRequestFilter {
         Set<SimpleGrantedAuthority> simpleGrantedAuthorities = new HashSet<>();
 
 
-        simpleGrantedAuthorities = Arrays.stream(authString.split(",")).distinct()
+        simpleGrantedAuthorities = Arrays.stream(authString.split(",")).distinct().filter(Ultilities::validString)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
 
@@ -50,10 +51,11 @@ public class JWTVerifierFilter extends OncePerRequestFilter {
     }
 
     private void logHeader(HttpServletRequest request){
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while(headerNames.hasMoreElements()){
-            String header = headerNames.nextElement();
-            log.info(String.format("Header: %s ----- Value: %s", header, request.getHeader(header)));
-        }
+        log.info(String.format("Email: %s <-----> Authorities: %s", request.getHeader("email"), request.getHeader("authorities")));
+//        Enumeration<String> headerNames = request.getHeaderNames();
+//        while(headerNames.hasMoreElements()){
+//            String header = headerNames.nextElement();
+//            log.info(String.format("Header: %s ----- Value: %s", header, request.getHeader(header)));
+//        }
     }
 }
