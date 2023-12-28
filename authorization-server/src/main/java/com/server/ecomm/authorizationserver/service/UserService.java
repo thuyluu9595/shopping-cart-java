@@ -1,6 +1,8 @@
 package com.server.ecomm.authorizationserver.service;
 import com.server.ecomm.authorizationserver.entity.User;
 import com.server.ecomm.authorizationserver.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -9,6 +11,9 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -28,6 +33,7 @@ public class UserService {
         if(isUserExisted(user.getEmail())){
             return false;
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
     }
@@ -38,7 +44,7 @@ public class UserService {
             return false;
         }else{
             existed_user.setEmail(user.getEmail());
-            existed_user.setPassword(user.getPassword());
+            existed_user.setPassword(passwordEncoder.encode(user.getPassword()));
             existed_user.setRole(user.getRole());
             userRepository.save(existed_user);
             return true;
