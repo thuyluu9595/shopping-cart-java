@@ -62,8 +62,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
                             log.info("Error happened " + error.toString());
                             HttpStatusCode errorCode;
                             String errorMsg;
-                            if(error instanceof WebClientResponseException){
-                                WebClientResponseException webClientResponseException = (WebClientResponseException) error;
+                            if(error instanceof WebClientResponseException webClientResponseException){
                                 errorCode = webClientResponseException.getStatusCode();
                                 errorMsg = webClientResponseException.getMessage();
                             } else {

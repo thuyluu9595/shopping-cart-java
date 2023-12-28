@@ -1,5 +1,7 @@
-package com.server.ecomm.user;
+package com.server.ecomm.user.service;
 
+import com.server.ecomm.user.entity.User;
+import com.server.ecomm.user.repository.UserRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +26,11 @@ public class UserService {
     }
 
     public User addUser(User user){
-        if (userRepository.findUserByName(user.getName()) != null && userRepository.findUserByEmail(user.getEmail()) != null){
+        User userByEmail = userRepository.findUserByEmail(user.getEmail());
+        if (userByEmail != null){
             return null;
         }
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -38,7 +42,7 @@ public class UserService {
 
         existUser.setName(user.getName());
         existUser.setEmail(user.getEmail());
-        existUser.setPassword(user.getPassword());
+//        existUser.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(existUser);
     }
 

@@ -39,7 +39,7 @@ public class AuthorizationServerController {
         return "<h1>Welcome to Admin Endpoint</h1>";
     }
 
-    @PostMapping("/register")
+    @PostMapping("/add")
     public ResponseEntity<User> registerUser(@RequestBody User user){
         if(userService.addUser(user)){
             return new ResponseEntity<>(user, HttpStatus.CREATED);
@@ -47,7 +47,7 @@ public class AuthorizationServerController {
         return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<User> updateUser(@RequestBody User user){
         if(userService.updateUser(user)){
             return new ResponseEntity<>(user, HttpStatus.CREATED);
@@ -55,7 +55,7 @@ public class AuthorizationServerController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<?> deleteUser(@RequestBody User user){
         if(userService.deleteUser(user)){
             return new ResponseEntity<>(HttpStatus.OK);

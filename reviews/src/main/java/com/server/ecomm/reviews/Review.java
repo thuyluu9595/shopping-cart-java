@@ -11,10 +11,10 @@ public class Review {
     private Long id;
 
     @Column(nullable = false)
-    private Long userId;
+    private long userId;
 
     @Column(nullable = false)
-    private Long productId;
+    private long productId;
 
     private String comment;
 
@@ -38,7 +38,7 @@ public class Review {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public long getUserId() {
         return userId;
     }
 
@@ -46,7 +46,7 @@ public class Review {
         this.userId = user_id;
     }
 
-    public Long getProductId() {
+    public long getProductId() {
         return productId;
     }
 

@@ -32,9 +32,9 @@ public class ReviewController {
 
     @GetMapping("/test")
     public String test(){
-        Long product_id;
+        long product_id;
         product_id = 1L;
-        Long user_id;
+        long user_id;
         user_id = 1L;
         if(reviewService.isProductAndUserExist(product_id,user_id)){
             return "<h1> True</h1>";
@@ -73,7 +73,7 @@ public class ReviewController {
         try {
             productServiceProxy.updateRating(product_id, review);
         } catch (Exception e){
-            log.warn(e.toString());
+            log.error(e.toString());
         }
         return new ResponseEntity<>(review, HttpStatus.CREATED);
     }
