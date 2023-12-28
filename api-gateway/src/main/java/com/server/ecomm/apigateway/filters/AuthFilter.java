@@ -60,8 +60,8 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
                         })
                         .flatMap(chain::filter).onErrorResume(error ->{
                             log.info("Error happened " + error.toString());
-                            HttpStatusCode errorCode = null;
-                            String errorMsg = "";
+                            HttpStatusCode errorCode;
+                            String errorMsg;
                             if(error instanceof WebClientResponseException){
                                 WebClientResponseException webClientResponseException = (WebClientResponseException) error;
                                 errorCode = webClientResponseException.getStatusCode();
