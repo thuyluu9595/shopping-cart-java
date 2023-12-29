@@ -1,4 +1,5 @@
 package com.server.ecomm.authorizationserver.service;
+import com.server.ecomm.authorizationserver.dto.UserDTO;
 import com.server.ecomm.authorizationserver.entity.User;
 import com.server.ecomm.authorizationserver.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,25 +29,36 @@ public class UserService {
         return user.isPresent();
     }
 
-    public boolean addUser(User user){
-        if(isUserExisted(user.getEmail())){
-            return false;
+    public User addUser(UserDTO userDTO){
+        if(isUserExisted(userDTO.getEmail())){
+            throw new RuntimeException("User existed");
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return true;
+        User newUser = new User();
+        newUser.setEmail(userDTO.getEmail());
+        newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        if (userDTO.isAdmin()){
+            newUser.setRole("ADMIN");
+        } else{
+            newUser.setRole("USER");
+        }
+        userRepository.save(newUser);
+        return newUser;
     }
 
-    public boolean updateUser(User user){
-        User existed_user = findUserByEmail(user.getEmail());
+    public User updateUser(UserDTO userDTO){
+        User existed_user = findUserByEmail(userDTO.getEmail());
         if(existed_user == null){
-            return false;
+            throw new RuntimeException("User not found!");
         }else{
-            existed_user.setEmail(user.getEmail());
-            existed_user.setPassword(passwordEncoder.encode(user.getPassword()));
-            existed_user.setRole(user.getRole());
+            existed_user.setEmail(userDTO.getEmail());
+            existed_user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            if (userDTO.isAdmin()){
+                existed_user.setRole("ADMIN");
+            } else{
+                existed_user.setRole("USER");
+            }
             userRepository.save(existed_user);
-            return true;
+            return existed_user;
         }
     }
 

@@ -1,5 +1,6 @@
 package com.server.ecomm.authorizationserver.controller;
 
+import com.server.ecomm.authorizationserver.dto.UserDTO;
 import com.server.ecomm.authorizationserver.entity.User;
 import com.server.ecomm.authorizationserver.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,20 +40,28 @@ public class AuthorizationServerController {
         return "<h1>Welcome to Admin Endpoint</h1>";
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<User> registerUser(@RequestBody User user){
-        if(userService.addUser(user)){
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO){
+        try{
+            User user = userService.addUser(userDTO);
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
+        catch (Exception e){
+            log.error(e.toString());
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     @PutMapping("/update")
-    public ResponseEntity<User> updateUser(@RequestBody User user){
-        if(userService.updateUser(user)){
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
+    public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO){
+        try{
+            User user = userService.updateUser(userDTO);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        catch (Exception e){
+            log.error(e.toString());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/delete")

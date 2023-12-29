@@ -45,7 +45,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
             ServerHttpRequest request = exchange.getRequest();
             String bearerToken = request.getHeaders().getFirst(SecurityConstants.HEADER);
             log.info(SecurityConstants.HEADER + " " + bearerToken);
-
+            log.info(exchange.getRequest().getURI().toString());
             if (isSecured.test(request)) {
                 return webClientBuilder.build().get()                                               // build a get request
                         .uri("lb://authentication-service/api/v1/validateToken")
