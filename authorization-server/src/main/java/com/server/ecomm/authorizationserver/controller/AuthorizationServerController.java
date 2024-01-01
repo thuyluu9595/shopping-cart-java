@@ -1,6 +1,6 @@
 package com.server.ecomm.authorizationserver.controller;
 
-import com.server.ecomm.authorizationserver.dto.UserDTO;
+import com.server.ecomm.dto.UserDTO;
 import com.server.ecomm.authorizationserver.entity.User;
 import com.server.ecomm.authorizationserver.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;

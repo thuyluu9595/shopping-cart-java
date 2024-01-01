@@ -1,6 +1,6 @@
 package com.server.ecomm.user.controller;
 
-import com.server.ecomm.user.DTOs.UserDTO;
+import com.server.ecomm.dto.UserDTO;
 import com.server.ecomm.user.service.UserService;
 import com.server.ecomm.user.config.proxy.AuthServiceProxy;
 import com.server.ecomm.user.entity.User;
@@ -73,7 +73,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO){
-        // 384ms
+        // 384ms, 1085ms
         try {
             User createdUser = userService.addUser(userDTO);
             return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
@@ -82,6 +82,7 @@ public class UserController {
             log.error(e.toString());
         }
         return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
+
     }
 
     @PutMapping("/profile/{id}")

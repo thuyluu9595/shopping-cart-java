@@ -1,5 +1,5 @@
 package com.server.ecomm.authorizationserver.service;
-import com.server.ecomm.authorizationserver.dto.UserDTO;
+import com.server.ecomm.dto.UserDTO;
 import com.server.ecomm.authorizationserver.entity.User;
 import com.server.ecomm.authorizationserver.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,7 +36,7 @@ public class UserService {
         User newUser = new User();
         newUser.setEmail(userDTO.getEmail());
         newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        if (userDTO.isAdmin()){
+        if (userDTO.isIsadmin()){
             newUser.setRole("ADMIN");
         } else{
             newUser.setRole("USER");
@@ -52,7 +52,7 @@ public class UserService {
         }else{
             existed_user.setEmail(userDTO.getEmail());
             existed_user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-            if (userDTO.isAdmin()){
+            if (userDTO.isIsadmin()){
                 existed_user.setRole("ADMIN");
             } else{
                 existed_user.setRole("USER");

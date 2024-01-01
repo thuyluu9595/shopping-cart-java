@@ -1,12 +1,12 @@
 package com.server.ecomm.user.service;
 
-import com.server.ecomm.user.DTOs.UserDTO;
+import com.server.ecomm.dto.UserDTO;
 import com.server.ecomm.user.config.proxy.AuthServiceProxy;
 import com.server.ecomm.user.entity.User;
 import com.server.ecomm.user.repository.UserRepository;
-import com.server.ecomm.user.ultil.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +18,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final AuthServiceProxy authServiceProxy;
 
-    public UserService(UserRepository userRepository, AuthServiceProxy authServiceProxy) {
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    public UserService(UserRepository userRepository, AuthServiceProxy authServiceProxy, KafkaTemplate<String, Object> kafkaTemplate) {
         this.userRepository = userRepository;
         this.authServiceProxy = authServiceProxy;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
 
@@ -33,30 +36,31 @@ public class UserService {
     }
 
     public User addUser(UserDTO userDTO){
-        if (userRepository.findUserByEmail(userDTO.getEmail()) != null){
-            throw new RuntimeException("Email has used!");
-        }
-
-        boolean isAdmin = false;
-        for (String adminEmail : Constants.adminEmails) {
-            if (userDTO.getEmail().equals(adminEmail)){
-                isAdmin = true;
-                break;
-            }
-        }
-
-        User user = new User(userDTO.getName(), userDTO.getEmail(), userDTO.getPassword(), isAdmin);
-
-        try {
-            authServiceProxy.createUser(user);
-        }
-        catch (Exception e) {
-            log.error(e.toString());
-            throw new RuntimeException("Cannot create user in Auth service");
-        }
-
-        userRepository.save(user);
-        return user;
+//        if (userRepository.findUserByEmail(userDTO.getEmail()) != null){
+//            throw new RuntimeException("Email has used!");
+//        }
+//
+//        boolean isAdmin = false;
+//        for (String adminEmail : Constants.adminEmails) {
+//            if (userDTO.getEmail().equals(adminEmail)){
+//                isAdmin = true;
+//                break;
+//            }
+//        }
+//
+//        User user = new User(userDTO.getName(), userDTO.getEmail(), userDTO.getPassword(), isAdmin);
+//
+//        try {
+//            authServiceProxy.createUser(user);
+//        }
+//        catch (Exception e) {
+//            log.error(e.toString());
+//            throw new RuntimeException("Cannot create user in Auth service");
+//        }
+//
+//        userRepository.save(user);
+        kafkaTemplate.send("test2", userDTO);
+        return null;
     }
 
     public User updateUser(Long id, User user){
