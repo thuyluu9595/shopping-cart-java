@@ -81,7 +81,7 @@ public class UserController {
         } catch (Exception e){
             log.error(e.toString());
         }
-        return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
     }
 

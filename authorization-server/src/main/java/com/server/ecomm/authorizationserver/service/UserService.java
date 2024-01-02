@@ -30,9 +30,6 @@ public class UserService {
     }
 
     public User addUser(UserDTO userDTO){
-        if(isUserExisted(userDTO.getEmail())){
-            throw new RuntimeException("User existed");
-        }
         User newUser = new User();
         newUser.setEmail(userDTO.getEmail());
         newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
