@@ -13,7 +13,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -40,6 +39,7 @@ public class UserService {
         }
         userRepository.save(newUser);
         return newUser;
+
     }
 
     public User updateUser(UserDTO userDTO){
@@ -54,6 +54,7 @@ public class UserService {
             } else{
                 existed_user.setRole("USER");
             }
+
             userRepository.save(existed_user);
             return existed_user;
         }
