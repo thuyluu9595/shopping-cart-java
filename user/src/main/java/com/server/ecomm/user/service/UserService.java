@@ -1,19 +1,30 @@
 package com.server.ecomm.user.service;
 
+import com.server.ecomm.dto.UserDTO;
+import com.server.ecomm.user.config.proxy.AuthServiceProxy;
 import com.server.ecomm.user.entity.User;
 import com.server.ecomm.user.repository.UserRepository;
+import com.server.ecomm.user.ultil.Constants;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AuthServiceProxy authServiceProxy;
 
-    public UserService(UserRepository userRepository) {
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    public UserService(UserRepository userRepository, AuthServiceProxy authServiceProxy, KafkaTemplate<String, Object> kafkaTemplate) {
         this.userRepository = userRepository;
+        this.authServiceProxy = authServiceProxy;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
 
@@ -25,12 +36,29 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public User addUser(User user){
-        User userByEmail = userRepository.findUserByEmail(user.getEmail());
-        if (userByEmail != null){
-            return null;
+    public User addUser(UserDTO userDTO){
+        if (userRepository.findUserByEmail(userDTO.getEmail()) != null){
+            throw new RuntimeException("Email has used!");
         }
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        for (String adminEmail : Constants.adminEmails) {
+            if (userDTO.getEmail().equals(adminEmail)){
+                userDTO.setIsadmin(true);
+                break;
+            }
+        }
+
+        User user = new User(userDTO.getName(), userDTO.getEmail(), userDTO.getPassword(), userDTO.isIsadmin());
+
+//        try {
+//            authServiceProxy.createUser(user);
+//        }
+//        catch (Exception e) {
+//            log.error(e.toString());
+//            throw new RuntimeException("Cannot create user in Auth service");
+//        }
+
+        kafkaTemplate.send("test2", userDTO);
         return userRepository.save(user);
     }
 

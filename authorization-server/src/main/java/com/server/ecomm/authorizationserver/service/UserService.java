@@ -1,7 +1,7 @@
 package com.server.ecomm.authorizationserver.service;
+import com.server.ecomm.dto.UserDTO;
 import com.server.ecomm.authorizationserver.entity.User;
 import com.server.ecomm.authorizationserver.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +11,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User findUserByEmail(String email){
@@ -29,25 +28,35 @@ public class UserService {
         return user.isPresent();
     }
 
-    public boolean addUser(User user){
-        if(isUserExisted(user.getEmail())){
-            return false;
+    public User addUser(UserDTO userDTO){
+        User newUser = new User();
+        newUser.setEmail(userDTO.getEmail());
+        newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        if (userDTO.isIsadmin()){
+            newUser.setRole("ADMIN");
+        } else{
+            newUser.setRole("USER");
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return true;
+        userRepository.save(newUser);
+        return newUser;
+
     }
 
-    public boolean updateUser(User user){
-        User existed_user = findUserByEmail(user.getEmail());
+    public User updateUser(UserDTO userDTO){
+        User existed_user = findUserByEmail(userDTO.getEmail());
         if(existed_user == null){
-            return false;
+            throw new RuntimeException("User not found!");
         }else{
-            existed_user.setEmail(user.getEmail());
-            existed_user.setPassword(passwordEncoder.encode(user.getPassword()));
-            existed_user.setRole(user.getRole());
+            existed_user.setEmail(userDTO.getEmail());
+            existed_user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            if (userDTO.isIsadmin()){
+                existed_user.setRole("ADMIN");
+            } else{
+                existed_user.setRole("USER");
+            }
+
             userRepository.save(existed_user);
-            return true;
+            return existed_user;
         }
     }
 

@@ -33,11 +33,8 @@ public class ProductService {
             return null;
         }
 
-        existingProduct.setName(product.getName());
-        existingProduct.setDescription(product.getDescription());
-        existingProduct.setPrice(product.getPrice());
-        existingProduct.setQty(product.getQty());
-        return productRepository.save(existingProduct);
+        product.setId(existingProduct.getId());
+        return productRepository.save(product);
     }
 
     private static double round(double value){

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "authorization-service", url = "localhost:8085")
 public interface AuthServiceProxy {
-    @PostMapping("/api/v1/validateToken/add")
+    @PostMapping("/api/v1/validateToken/register")
     void createUser(@RequestBody User user);
 
     @PutMapping("/api/v1/validateToken/update")

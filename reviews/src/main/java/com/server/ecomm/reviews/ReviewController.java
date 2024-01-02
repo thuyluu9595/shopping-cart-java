@@ -25,10 +25,10 @@ public class ReviewController {
     }
 
 
-    @GetMapping("/home")
-    public String home(){
-        return "<h1> Welcome to Review Route </h1>";
-    }
+//    @GetMapping("/home")
+//    public String home(){
+//        return "<h1> Welcome to Review Route </h1>";
+//    }
 
     @GetMapping("/test")
     public String test(){
