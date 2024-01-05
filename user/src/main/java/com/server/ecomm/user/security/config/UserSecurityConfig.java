@@ -24,7 +24,7 @@ public class UserSecurityConfig {
                 .and()
                 .addFilterBefore(new JWTVerifierFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers("api/v1/users").permitAll()
+                .requestMatchers("/api/v1/users/home","/api/v1/users/register").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

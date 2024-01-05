@@ -4,6 +4,7 @@ import com.server.ecomm.authorizationserver.security.filters.JWTAuthFilter;
 import com.server.ecomm.authorizationserver.security.filters.JWTVerifierFilter;
 import com.server.ecomm.authorizationserver.security.services.ApplicationUserDetailService;
 import com.server.ecomm.authorizationserver.service.redis.TokensRedisService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,7 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@Slf4j
 public class WebSecurityConfig {
 
     @Autowired
@@ -45,7 +47,9 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/validateToken/register", "/api/v1/validateToken/home")
+                .requestMatchers("/api/v1/validateToken/register",
+                        "/api/v1/validateToken/home",
+                        "/api/v1/users/register")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

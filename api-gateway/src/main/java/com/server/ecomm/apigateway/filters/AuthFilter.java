@@ -45,7 +45,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
             ServerHttpRequest request = exchange.getRequest();
             String bearerToken = request.getHeaders().getFirst(SecurityConstants.HEADER);
             log.info(SecurityConstants.HEADER + " " + bearerToken);
-
+            log.info(exchange.getRequest().getURI().toString());
             if (isSecured.test(request)) {
                 return webClientBuilder.build().get()                                               // build a get request
                         .uri("lb://authentication-service/api/v1/validateToken")
@@ -60,8 +60,8 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
                         })
                         .flatMap(chain::filter).onErrorResume(error ->{
                             log.info("Error happened " + error.toString());
-                            HttpStatusCode errorCode = null;
-                            String errorMsg = "";
+                            HttpStatusCode errorCode;
+                            String errorMsg;
                             if(error instanceof WebClientResponseException webClientResponseException){
                                 errorCode = webClientResponseException.getStatusCode();
                                 errorMsg = webClientResponseException.getMessage();
